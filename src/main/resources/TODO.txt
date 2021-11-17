@@ -1,0 +1,13 @@
+Online repülőjegy értékesítő rendszer
+A feladat egy online repülőjegy foglaló és értékesítő rendszer megtervezése és implementálása.
+Az elkészített webes rendszer alap funkciója a jegy keresése és értékesítése.
+A repülőjegyeket adatbázisban tárolja a rendszer és a légitársaságok viszik fel a menetrendet és a repülőgép típusát (ami megszabja a helyek számát).
+A felhasználók a menetrendben kereshetnek a dátum és a repülőterek megadásával -> utazas napja == departure_time.toDay(), from_city, to_city
+, a találatot szűrhetik a preferált légitársaság szerint, valamint az átszállási idő szerint. -> Airline name, atszallasi ido nem haladhatja meg az x percet darabonkent
+A keresés átszállásos utakat is fel kell ajánljon. A kiválasztott repülőjegy értékesítéséhez a bankkártyás fizetést külső szolgáltató biztosítja egy webservice segítségével (mock-oltan).
+Fontos, hogy csak annyi jegyet lehessen eladni, ahány hely az adott gépen van, és a vásárló megadhassa preferenciáját ablak melletti vagy folyosó melletti helyre,
+amelyet a foglalási rendszernek figyelembe kell vennie. A rendszer a légitársaságoknak biztosítson külön felületet a menetrend megadásához és módosításához,
+valamint a gyakori utazóknak regisztrációs lehetőséget és preferált beállításaik (pl. légitársaság, kiindulási reptér) eltárolását.
+
+----
+extra feature sorting

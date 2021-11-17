@@ -1,6 +1,5 @@
 package org.openapitools.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 import lombok.experimental.Accessors;
 
@@ -20,9 +19,10 @@ import java.time.Instant;
 public class Flight   {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Integer id;
+  private Integer flightId;
   private Instant departureTime;
   private Instant arrivalTime;
+  private String airline;
   private String fromCity;
   private String toCity;
   private int numberOfSeats;
@@ -32,7 +32,7 @@ public class Flight   {
     StringBuilder sb = new StringBuilder();
     sb.append("class Flight {\n");
     
-    sb.append("    id: ").append(toIndentedString(id)).append("\n");
+    sb.append("    id: ").append(toIndentedString(flightId)).append("\n");
     sb.append("    departureTime: ").append(toIndentedString(departureTime)).append("\n");
     sb.append("    arrivalTime: ").append(toIndentedString(arrivalTime)).append("\n");
     sb.append("    fromCity: ").append(toIndentedString(fromCity)).append("\n");
