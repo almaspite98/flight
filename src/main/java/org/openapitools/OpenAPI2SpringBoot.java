@@ -27,7 +27,7 @@ public class OpenAPI2SpringBoot implements CommandLineRunner {
     }
 
     static class ExitException extends RuntimeException implements ExitCodeGenerator {
-        private static final int serialVersionUID = 1L;
+        private static final Long serialVersionUID = 1L;
 
         @Override
         public int getExitCode() {

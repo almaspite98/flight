@@ -25,17 +25,17 @@ public class OpenAPIDocumentationConfig {
     ApiInfo apiInfo() {
         return new ApiInfoBuilder()
             .title("Swagger Flightdatabase")
-            .description("This is a sample server Flightdatabase server.  You can find out more about     Swagger at [http://swagger.io](http://swagger.io) or on [irc.freenode.net, #swagger](http://swagger.io/irc/).      For this sample, you can use the api key `special-key` to test the authorization     filters.")
-            .license("Apache 2.0")
-            .licenseUrl("http://www.apache.org/licenses/LICENSE-2.0.html")
+            .description("This is a sample server Flightdatabase server.")
+//            .license("Apache 2.0")
+//            .licenseUrl("http://www.apache.org/licenses/LICENSE-2.0.html")
             .termsOfServiceUrl("")
             .version("1.0.0")
-            .contact(new Contact("","", "apiteam@swagger.io"))
+//            .contact(new Contact("","", "apiteam@swagger.io"))
             .build();
     }
 
     @Bean
-    public Docket customImplementation(ServletContext servletContext, @Value("${openapi.swaggerFlightdatabase.base-path:/v2}") String basePath) {
+    public Docket customImplementation(ServletContext servletContext, @Value("${openapi.swaggerFlightdatabase.base-path:}") String basePath) {
         return new Docket(DocumentationType.SWAGGER_2)
                 .select()
                     .apis(RequestHandlerSelectors.basePackage("org.openapitools.api"))
