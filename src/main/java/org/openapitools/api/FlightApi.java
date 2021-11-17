@@ -3,6 +3,7 @@ package org.openapitools.api;
 import io.swagger.annotations.*;
 import lombok.AllArgsConstructor;
 import org.openapitools.model.Flight;
+import org.openapitools.service.FlightService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -12,12 +13,15 @@ import org.springframework.web.context.request.NativeWebRequest;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.time.Duration;
+import java.time.Instant;
+import java.util.List;
 import java.util.Optional;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/flight")
 public class FlightApi {
-
+    private final FlightService flightService;
     /**
      * POST /flight : Add a new flight to the database
      *
@@ -84,9 +88,8 @@ public class FlightApi {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK") })
     @GetMapping("/routes")
-    public ResponseEntity<Void> routes(@NotNull @ApiParam(value = "Filter", required = true) @Valid @RequestParam(value = "from", required = true) String from, @NotNull @ApiParam(value = "Filter", required = true) @Valid @RequestParam(value = "to", required = true) String to, @NotNull @ApiParam(value = "Filter", required = true) @Valid @RequestParam(value = "departure", required = true) String departure, @ApiParam(value = "Filter") @Valid @RequestParam(value = "maxWait", required = false) Integer maxWait, @ApiParam(value = "Filter") @Valid @RequestParam(value = "airline", required = false) String airline) {
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
-
+    public List<Flight> routes(@NotNull @ApiParam(value = "Filter", required = false) @Valid @RequestParam(value = "from", required = false) String from, @NotNull @ApiParam(value = "Filter", required = false) @Valid @RequestParam(value = "to", required = false) String to, @NotNull @ApiParam(value = "Filter", required = false) @Valid @RequestParam(value = "departure", required = false) String departure, @ApiParam(value = "Filter") @Valid @RequestParam(value = "maxWait", required = false) Integer maxWait, @ApiParam(value = "Filter") @Valid @RequestParam(value = "airline", required = false) String airline) {
+        return flightService.findAll();
     }
 
     /**
@@ -111,7 +114,7 @@ public class FlightApi {
             @ApiResponse(code = 404, message = "Flight not found"),
             @ApiResponse(code = 500, message = "Internal server error occured") })
     @GetMapping("/{flightId}")
-    public String getFlightById(@ApiParam(value = "ID of flight to return", required = true) @PathVariable("flightId") int flightId) {
+    public Optional<Flight> getFlightById(@ApiParam(value = "ID of flight to return", required = true) @PathVariable("flightId") Integer flightId) {
 //        getRequest().ifPresent(request -> {
 //            for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
 //                if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
@@ -127,7 +130,8 @@ public class FlightApi {
 //            }
 //        });
 //        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
-        return "Hello world";
+//        return Flight.builder().id(12).departureTime(Instant.now().plus(Duration.ofHours(11))).arrivalTime(Instant.now().plus(Duration.ofHours(12))).fromCity("Budapest").toCity("Kairo").build();
+        return flightService.findById(flightId);
     }
 
 
