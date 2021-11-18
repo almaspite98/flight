@@ -120,10 +120,10 @@
                   </div>
                   <div class="col-md">
                       <div class="form-group">
-                      <label for="id_label_single2">Airline</label>
+                      <label for="airline_select">Airline</label>
                       <div class="probootstrap_select-wrap">
-                        <label for="id_label_single2" style="width: 100%;">
-                        <select class="js-example-basic-single js-states form-control" id="id_label_single2" style="width: 100%;">
+                        <label for="airline_select" style="width: 100%;">
+                        <select class="js-example-basic-single js-states form-control" id="airline_select" style="width: 100%;">
                           <option value="All">All</option>
 						  <option value="Wizz Air">Wizz Air</option>
                           <option value="RyanAir">RyanAir</option>
@@ -148,7 +148,8 @@
                 <!-- END row -->
                 <div class="row">
                   <div class="col-md">
-                    <input type="submit" value="Submit" class="btn btn-primary btn-block">
+                    <input type="submit" value="Submit" onclick="searchRoutes(document.getElementById('from').value,document.getElementById('to').value,
+                    document.getElementById('probootstrap-date-departure').value, document.getElementById('airline_select').value, document.getElementById('wait_time').value)" class="btn btn-primary btn-block">
                   </div>
                 </div>
               </div>
@@ -268,6 +269,7 @@
     </footer>
 
     
+    <script src="assets/js/flight-service.js"></script>
     <script src="assets/js/jquery.min.js"></script>
     
     <script src="assets/js/popper.min.js"></script>
