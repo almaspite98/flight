@@ -2,8 +2,10 @@ package org.openapitools.api;
 
 import io.swagger.annotations.*;
 import lombok.AllArgsConstructor;
+import org.openapitools.model.Airline;
 import org.openapitools.model.Flight;
 import org.openapitools.model.Route;
+import org.openapitools.service.AirlineService;
 import org.openapitools.service.FlightService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -24,6 +26,7 @@ import java.util.Optional;
 @RequestMapping("/flight")
 public class FlightApi {
     private final FlightService flightService;
+    private final AirlineService airlineService;
 
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "Flight created"),
@@ -32,7 +35,15 @@ public class FlightApi {
             @ApiResponse(code = 500, message = "Internal server error occured")})
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public Flight create(@Valid @RequestBody Flight flight) {
+    public Flight create(
+            @ApiParam(value = "Api key", required = true) @RequestHeader(value = "api_key", required = true) String api_key,
+            @Valid @RequestBody Flight flight) {
+
+        Airline airline = airlineService.findByApi_key(api_key);
+        // Authenticate and authorise
+        if (airline == null || !airline.getName().equals(flight.getAirline())){
+
+        }
         return flightService.create(flight);
     }
 
@@ -44,7 +55,20 @@ public class FlightApi {
             @ApiResponse(code = 500, message = "Internal server error occured")})
     @ResponseStatus(HttpStatus.OK)
     @DeleteMapping("/{flightId}")
-    public void deleteFlight(@PathVariable("flightId") int flightId) {
+    public void deleteFlight(
+            @PathVariable("flightId") int flightId,
+            @ApiParam(value = "Api key", required = true) @RequestHeader(value = "api_key", required = true) String api_key) {
+
+        Optional<Flight> flight = flightService.findById(flightId);
+        if (!flight.isPresent()){
+
+        }
+
+        Airline airline = airlineService.findByApi_key(api_key);
+        // Authenticate and authorise
+        if (airline == null || !airline.getName().equals(flight.get().getAirline())){
+
+        }
         flightService.delete(flightId);
     }
 
@@ -77,8 +101,14 @@ public class FlightApi {
             @ApiResponse(code = 404, message = "Flight not found"),
             @ApiResponse(code = 500, message = "Internal server error occured")})
     @GetMapping("/{flightId}")
-    public Optional<Flight> getFlightById(@ApiParam(value = "ID of flight to return", required = true) @PathVariable("flightId") Integer flightId) {
-        return flightService.findById(flightId);
+    public Flight getFlightById(
+            @ApiParam(value = "ID of flight to return", required = true) @PathVariable("flightId") Integer flightId) {
+        // check if flight exists
+        Optional<Flight> flight = flightService.findById(flightId);
+        if (!flight.isPresent()){
+
+        }
+        return flightService.findById(flightId).get();
     }
 
 
@@ -90,9 +120,26 @@ public class FlightApi {
             @ApiResponse(code = 405, message = "Validation exception"),
             @ApiResponse(code = 500, message = "Internal server error occured")})
     @PutMapping
-    public ResponseEntity<Void> updateFlight(@ApiParam(value = "Flight object that needs to be added to the database", required = true) @Valid @RequestBody Flight body) {
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+    public ResponseEntity<Void> updateFlight(
+            @ApiParam(value = "Flight object that needs to be added to the database", required = true) @Valid @RequestBody Flight newFlight,
+            @ApiParam(value = "Api key", required = true) @RequestHeader(value = "api_key", required = true) String api_key) {
+        Optional<Flight> flightExist = flightService.findById(newFlight.getFlightId());
+        if (!flightExist.isPresent()){
 
+        }
+        Flight flight = flightExist.get();
+
+        Airline airline = airlineService.findByApi_key(api_key);
+        // Authenticate and authorise
+        if (airline == null || !airline.getName().equals(flight.getAirline())){
+
+        }
+        flight.setArrivalTime(newFlight.getArrivalTime());
+        flight.setDepartureTime(newFlight.getDepartureTime());
+        flight.setFromCity(newFlight.getFromCity());
+        flight.setToCity(newFlight.getToCity());
+        flight.setNumberOfSeats(newFlight.getNumberOfSeats());
+        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
     }
 
     @ApiResponses(value = {

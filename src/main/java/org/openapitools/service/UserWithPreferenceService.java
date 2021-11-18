@@ -2,7 +2,6 @@ package org.openapitools.service;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.openapitools.model.Preferences;
 import org.openapitools.model.User;
 import org.openapitools.model.UserWithPreferences;
 import org.openapitools.repository.UserWithPreferenceRepository;

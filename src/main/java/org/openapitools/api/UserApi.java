@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.NativeWebRequest;
 
 import javax.validation.Valid;
+import java.security.SecureRandom;
 import java.util.Optional;
 @RestController
 @AllArgsConstructor
@@ -48,7 +49,9 @@ public class UserApi{
             value = "/user",
             consumes = { "application/json" }
     )
-    public ResponseEntity<Void> setpreferences(@ApiParam(value = "Security token", required = true) @RequestHeader(value = "token", required = true) String token,@ApiParam(value = "Preferences", required = true) @Valid @RequestBody Preferences preferences) {
+    public ResponseEntity<Void> setpreferences(
+            @ApiParam(value = "Security token", required = true) @RequestHeader(value = "token", required = true) String token,
+            @ApiParam(value = "Preferences", required = true) @Valid @RequestBody Preferences preferences) {
         UserWithPreferences user = userService.findByToken(token);
 
         // if invalid token
@@ -78,7 +81,10 @@ public class UserApi{
         // if password is correct
         if (userwithpreferences.getPassword().equals(user.getPassword())){
             // generate token
-            String token = "";
+            SecureRandom random = new SecureRandom();
+            byte bytes[] = new byte[20];
+            random.nextBytes(bytes);
+            String token = bytes.toString();
             userwithpreferences.setToken(token);
         }
         else {
