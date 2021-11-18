@@ -35,8 +35,8 @@ public class BillingApi {
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public ResponseEntity<PaymentResult> billing(@RequestBody @Valid Payment payment) {
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
 
+        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
     }
 
 }

@@ -7,6 +7,8 @@ import io.swagger.annotations.ApiResponses;
 import lombok.AllArgsConstructor;
 import org.openapitools.model.Preferences;
 import org.openapitools.model.User;
+import org.openapitools.model.UserWithPreferences;
+import org.openapitools.service.UserWithPreferenceService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -20,34 +22,24 @@ import java.util.Optional;
 @RequestMapping("/user")
 public class UserApi{
 
-    /**
-     * GET /user : Get preferences
-     *
-     * @param token Security token (required)
-     * @param preferences  (required)
-     * @return OK (status code 200)
-     *         or Unauthorised (status code 401)
-     */
-//    @ApiOperation(value = "Get preferences", nickname = "getpreferences", notes = "", tags={ "user", })
+    private final UserWithPreferenceService userService;
+
+    @ApiOperation(value = "Get preferences", nickname = "getpreferences", notes = "", tags={ "user", })
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK"),
             @ApiResponse(code = 401, message = "Unauthorised") })
     @GetMapping
-    public ResponseEntity<Void> getPreferences(@ApiParam(value = "Security token", required = true) @RequestHeader(value = "token", required = true) String token, @ApiParam(value = "", required = true) @RequestHeader(value = "preferences", required = true) Preferences preferences) {
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+    public Preferences getPreferences(
+            @ApiParam(value = "Security token", required = true) @RequestHeader(value = "token", required = true) String token) {
+        UserWithPreferences user = userService.findByToken(token);
+        // if invalid token
+        if (user == null) {
 
+        }
+        return new Preferences(user.getDeparture(), user.getTransferTime(), user.getAirline());
     }
 
-
-    /**
-     * POST /user : Set preferences
-     *
-     * @param token Security token (required)
-     * @param preferences Preferences (required)
-     * @return Updated. (status code 201)
-     *         or Unauthorised (status code 401)
-     */
-//    @ApiOperation(value = "Set preferences", nickname = "setpreferences", notes = "", tags={ "user", })
+    @ApiOperation(value = "Set preferences", nickname = "setpreferences", notes = "", tags={ "user", })
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "Updated."),
             @ApiResponse(code = 401, message = "Unauthorised") })
@@ -57,18 +49,20 @@ public class UserApi{
             consumes = { "application/json" }
     )
     public ResponseEntity<Void> setpreferences(@ApiParam(value = "Security token", required = true) @RequestHeader(value = "token", required = true) String token,@ApiParam(value = "Preferences", required = true) @Valid @RequestBody Preferences preferences) {
+        UserWithPreferences user = userService.findByToken(token);
+
+        // if invalid token
+        if (user == null) {
+
+        }
+        user.setAirline(preferences.getAirline());
+        user.setDeparture(preferences.getDeparture());
+        user.setTransferTime(preferences.getTransferTime());
         return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
 
     }
 
-    /**
-     * POST /login : Login a user
-     *
-     * @param user Username and hash of password (required)
-     * @return Logged in. Use token supplied. (status code 201)
-     *         or Incorrect username or password (status code 401)
-     */
-//    @ApiOperation(value = "Login a user", nickname = "login", notes = "", tags={ "user", })
+    @ApiOperation(value = "Login a user", nickname = "login", notes = "", tags={ "user", })
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "Logged in. Use token supplied."),
             @ApiResponse(code = 401, message = "Incorrect username or password") })
@@ -77,19 +71,24 @@ public class UserApi{
             value = "/login",
             consumes = { "application/json" }
     )
-    public ResponseEntity<Void> login(@ApiParam(value = "Username and hash of password", required = true) @Valid @RequestBody User user) {
+    public ResponseEntity<Void> login(
+            @ApiParam(value = "Username and hash of password", required = true) @Valid @RequestBody User user) {
+        UserWithPreferences userwithpreferences = userService.findByEmail(user.getEmail());
+
+        // if password is correct
+        if (userwithpreferences.getPassword().equals(user.getPassword())){
+            // generate token
+            String token = "";
+            userwithpreferences.setToken(token);
+        }
+        else {
+
+        }
         return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
 
     }
 
-    /**
-     * POST /register : Register a user
-     *
-     * @param user Username and hash of password (required)
-     * @return Registered. (status code 201)
-     *         or Already registered (status code 403)
-     */
-//    @ApiOperation(value = "Register a user", nickname = "register", notes = "", tags={ "user", })
+    @ApiOperation(value = "Register a user", nickname = "register", notes = "", tags={ "user", })
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "Registered."),
             @ApiResponse(code = 403, message = "Already registered") })
@@ -98,8 +97,16 @@ public class UserApi{
             value = "/register",
             consumes = { "application/json" }
     )
-    public ResponseEntity<Void> register(@ApiParam(value = "Username and hash of password", required = true) @Valid @RequestBody User user) {
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+    public ResponseEntity<Void> register(
+            @ApiParam(value = "Username and hash of password", required = true) @Valid @RequestBody User user) {
+        UserWithPreferences userwithpreferences = userService.findByEmail(user.getEmail());
 
+        // if user already exists
+        if (userwithpreferences != null){
+
+        }
+        userService.create(user);
+
+        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
     }
 }
