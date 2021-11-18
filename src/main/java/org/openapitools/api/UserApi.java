@@ -8,6 +8,8 @@ import lombok.AllArgsConstructor;
 import org.openapitools.model.Preferences;
 import org.openapitools.model.User;
 import org.openapitools.model.UserWithPreferences;
+import org.openapitools.service.PaymentService;
+import org.openapitools.service.ReservationService;
 import org.openapitools.service.UserWithPreferenceService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +24,6 @@ import java.util.Optional;
 @AllArgsConstructor
 @RequestMapping("/user")
 public class UserApi{
-
     private final UserWithPreferenceService userService;
 
     @ApiOperation(value = "Get preferences", nickname = "getpreferences", notes = "", tags={ "user", })

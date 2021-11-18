@@ -6,7 +6,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.AllArgsConstructor;
 import org.openapitools.model.Payment;
 import org.openapitools.model.PaymentResult;
-import org.openapitools.model.PaymentStatus;
+import org.openapitools.service.PaymentService;
+import org.openapitools.service.ReservationService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,25 +18,22 @@ import javax.validation.Valid;
 @AllArgsConstructor
 @RequestMapping("/billing")
 public class BillingApi {
+    private final ReservationService reservationService;
+    private final PaymentService paymentService;
 
-
-    /**
-     * POST /billing : Calling external payment provider
-     *
-     * @body payment Result of the payment. Either SUCCESSFUL or FAILED (required)
-     * @return Payment registered (status code 201)
-     *         or Unauthorised (status code 401)
-     *         or Reservation does not exist (status code 404)
-     */
-    @Operation(summary = "Calling external payment provider")
+    @Operation(summary = "External payment provider telling if payment was successful")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Payment registered"),
             @ApiResponse(responseCode = "401", description = "Unauthorised"),
             @ApiResponse(responseCode = "404", description = "Reservation does not exist") })
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public ResponseEntity<PaymentResult> billing(@RequestBody @Valid Payment payment) {
+    public ResponseEntity<PaymentResult> billing(@RequestBody @Valid PaymentResult result) {
+        Payment payment = paymentService.findById(result.getReservation_id());
+        if (payment==null){
 
+        }
+        payment.setStatus(result.getStatus());
         return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
     }
 

@@ -5,13 +5,14 @@ import lombok.AllArgsConstructor;
 import org.openapitools.model.Airline;
 import org.openapitools.model.Flight;
 import org.openapitools.model.Route;
-import org.openapitools.service.AirlineService;
-import org.openapitools.service.FlightService;
+import org.openapitools.model.UserWithPreferences;
+import org.openapitools.service.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.security.SecureRandom;
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
@@ -20,8 +21,11 @@ import java.util.Optional;
 @AllArgsConstructor
 @RequestMapping("/flight")
 public class FlightApi {
+    private final UserWithPreferenceService userService;
     private final FlightService flightService;
     private final AirlineService airlineService;
+    private final ReservationService reservationService;
+    private final PaymentService paymentService;
 
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "Flight created"),
@@ -143,7 +147,36 @@ public class FlightApi {
             @ApiResponse(code = 403, message = "Invalid input"),
             @ApiResponse(code = 500, message = "Internal server error occured")})
     @PostMapping("/reserve")
-    public ResponseEntity<Void> reserve(@ApiParam(value = "Security token", required = true) @RequestHeader(value = "token", required = true) String token, @ApiParam(value = "Flight IDs of flights to reserve", required = true) @Valid @RequestBody Object reservation) {
+    public ResponseEntity<Void> reserve(
+            @ApiParam(value = "Security token", required = true) @RequestHeader(value = "token", required = true) String token,
+            @ApiParam(value = "Flight IDs of flights to reserve", required = true) @Valid @RequestBody Route reservation) {
+
+        UserWithPreferences user = userService.findByToken(token);
+        // if invalid token
+        if (user == null) {
+
+        }
+        for (Flight f : reservation.getFlights()){
+            Optional<Flight> found = flightService.findById(f.getFlightId());
+            if (!found.isPresent()){
+                // flight does not exist
+
+            }
+            if (found.get().getNumberOfSeats() <= 0){
+                // no seats left
+
+            }
+        }
+
+        // get a valid unique reservationId
+        SecureRandom random = new SecureRandom();
+        Integer reservationId = random.nextInt();
+        while (reservationService.groupIdInUse(reservationId)){
+            reservationId = random.nextInt();
+        }
+
+        reservationService.reserveRoute(reservationId, reservation.getFlights(), user.getEmail());
+        // external payment provider would be called here
         return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
 
     }

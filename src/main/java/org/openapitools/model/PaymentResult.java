@@ -8,6 +8,6 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PaymentResult {
-    int reservation_id;
-    PaymentStatus status;
+    Integer reservation_id;
+    String status;
 }
