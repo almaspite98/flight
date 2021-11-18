@@ -17,5 +17,5 @@ import javax.persistence.*;
 public class Airline {
     @Id
     String name;
-    String api_key;
+    String apiKey;
 }

@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface AirlineRepository extends JpaRepository<Airline, Integer>, JpaSpecificationExecutor<Airline> {
-    Airline findByApi_key(String api_key);
+    Airline findByApiKey(String apiKey);
 }

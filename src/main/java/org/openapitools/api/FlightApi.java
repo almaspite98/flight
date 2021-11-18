@@ -8,15 +8,10 @@ import org.openapitools.model.Route;
 import org.openapitools.service.AirlineService;
 import org.openapitools.service.FlightService;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.context.request.NativeWebRequest;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-import java.time.Duration;
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
@@ -39,7 +34,7 @@ public class FlightApi {
             @ApiParam(value = "Api key", required = true) @RequestHeader(value = "api_key", required = true) String api_key,
             @Valid @RequestBody Flight flight) {
 
-        Airline airline = airlineService.findByApi_key(api_key);
+        Airline airline = airlineService.findByApiKey(api_key);
         // Authenticate and authorise
         if (airline == null || !airline.getName().equals(flight.getAirline())){
 
@@ -64,7 +59,7 @@ public class FlightApi {
 
         }
 
-        Airline airline = airlineService.findByApi_key(api_key);
+        Airline airline = airlineService.findByApiKey(api_key);
         // Authenticate and authorise
         if (airline == null || !airline.getName().equals(flight.get().getAirline())){
 
@@ -129,7 +124,7 @@ public class FlightApi {
         }
         Flight flight = flightExist.get();
 
-        Airline airline = airlineService.findByApi_key(api_key);
+        Airline airline = airlineService.findByApiKey(api_key);
         // Authenticate and authorise
         if (airline == null || !airline.getName().equals(flight.getAirline())){
 
