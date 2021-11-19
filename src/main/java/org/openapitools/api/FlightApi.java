@@ -168,14 +168,21 @@ public class FlightApi {
             }
         }
 
-        // get a valid unique reservationId
         SecureRandom random = new SecureRandom();
         Integer reservationId = random.nextInt();
+        // WARRNING: THIS ALL SHOULD BE A TRANSACTION
+        // get a valid unique reservationId
         while (reservationService.groupIdInUse(reservationId)){
             reservationId = random.nextInt();
         }
 
-        reservationService.reserveRoute(reservationId, reservation.getFlights(), user.getEmail());
+        for (Flight i : reservation.getFlights()){
+            reservationService.create(reservationId, i.getFlightId(), user.getEmail());
+            Flight f = flightService.findById(i.getFlightId()).get();
+            f.setNumberOfSeats(f.getNumberOfSeats()-1);
+        }
+        // END OF TRANSACTION
+
         // external payment provider would be called here
         return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
 

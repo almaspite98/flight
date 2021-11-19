@@ -15,11 +15,6 @@ import java.util.List;
 public class ReservationService {
     private final ReservationRepository reservationRepository;
 
-    public void reserveRoute(Integer groupId, List<Flight> flights, String email){
-        for (Flight i : flights){
-            create(groupId, i.getFlightId(), email);
-        }
-    }
     public Reservation create(Integer groupId, Integer flightId, String email) {
         log.debug("Reservation create(Integer groupId, Integer flightId): {} {}", groupId, flightId);
         Reservation reservation = new Reservation();
