@@ -8,7 +8,6 @@ import lombok.AllArgsConstructor;
 import org.openapitools.model.Preferences;
 import org.openapitools.model.User;
 import org.openapitools.model.UserWithPreferences;
-import org.openapitools.service.PaymentService;
 import org.openapitools.service.ReservationService;
 import org.openapitools.service.UserWithPreferenceService;
 import org.springframework.http.HttpStatus;

@@ -25,7 +25,6 @@ public class FlightApi {
     private final FlightService flightService;
     private final AirlineService airlineService;
     private final ReservationService reservationService;
-    private final PaymentService paymentService;
 
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "Flight created"),

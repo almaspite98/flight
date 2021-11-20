@@ -4,6 +4,7 @@ import lombok.*;
 import lombok.experimental.Accessors;
 
 import javax.persistence.*;
+import java.time.Instant;
 
 
 @Data
@@ -21,4 +22,6 @@ public class Reservation {
     private Integer groupId;
     private Integer flightId;
     private String email;
+    private Instant timestamp;
+    private String status;
 }

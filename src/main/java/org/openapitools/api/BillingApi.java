@@ -4,22 +4,25 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.AllArgsConstructor;
-import org.openapitools.model.Payment;
+import org.openapitools.model.Flight;
 import org.openapitools.model.PaymentResult;
-import org.openapitools.service.PaymentService;
+import org.openapitools.model.Reservation;
+import org.openapitools.service.FlightService;
 import org.openapitools.service.ReservationService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
+import java.util.Optional;
 
 @RestController
 @AllArgsConstructor
 @RequestMapping("/billing")
 public class BillingApi {
     private final ReservationService reservationService;
-    private final PaymentService paymentService;
+    private final FlightService flightService;
 
     @Operation(summary = "External payment provider telling if payment was successful")
     @ApiResponses(value = {
@@ -29,11 +32,16 @@ public class BillingApi {
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public ResponseEntity<PaymentResult> billing(@RequestBody @Valid PaymentResult result) {
-        Payment payment = paymentService.findById(result.getReservation_id());
-        if (payment==null){
+        List<Reservation> reservations = reservationService.findAllByGroupId(result.getReservation_id());
+        // reservation does not exist or not in pending state
+        if (reservations.isEmpty() || !reservations.get(0).getStatus().equals("PENDING")){
 
         }
-        payment.setStatus(result.getStatus());
+
+        // Set status. Revert functionality is done by another app
+        for (Reservation r : reservations) {
+            r.setStatus(result.getStatus());
+        }
         return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
     }
 

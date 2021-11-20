@@ -23,8 +23,11 @@ public class ReservationService {
         reservation.setEmail(email);
         return reservationRepository.save(reservation);
     }
+    public List<Reservation> findAllByGroupId(Integer groupId){
+        return reservationRepository.findAllByGroupId(groupId);
+    };
     public boolean groupIdInUse(Integer groupId){
-        if (reservationRepository.findByGroupId(groupId)==null)
+        if (reservationRepository.findAllByGroupId(groupId).isEmpty())
             return false;
         return true;
     }
