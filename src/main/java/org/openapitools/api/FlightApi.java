@@ -171,6 +171,18 @@ public class FlightApi {
             }
         }
 
+        String sql = "START TRANSACTION;\n@newID := SELECT MAX() FROM reservations;\n@time := SELECT NOW();\n";
+        for (Flight i : reservation.getFlights()){
+            String insert = "INSERT INTO reservations (email, flight_id, group_id, status, timestamp)\n" +
+                    "VALUES ('"+user.getEmail()+"', "+i.getFlightId()+", @newID, 'PENDING', @time);\n";
+            sql += insert;
+            String update = "UPDATE flights\nSET numberOfSeats = numberOfSeats-1\nWHERE flightId="+
+                    +i.getFlightId()+";";
+            sql += update;
+
+        }
+        sql += "COMMIT;\n";
+
         SecureRandom random = new SecureRandom();
         Integer reservationId = random.nextInt();
         // WARRNING: THIS ALL SHOULD BE A TRANSACTION
