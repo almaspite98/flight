@@ -1,41 +1,63 @@
 //function searchRoutes(from, to, departure, wait_time, airline) {
-  //  alert(from + " " + to + " " + departure + " " + wait_time + " " + airline)
-//}
-
-//const searchRoutes = async (from, to, departure, wait_time, airline) => {
+//  //  alert(from + " " + to + " " + departure + " " + wait_time + " " + airline)
+//  var date = new Date(departure);
+//  var instant = date.toISOString();
+//    console.log(instant)
 //    console.log(from + " " + to + " " + departure + " " + wait_time + " " + airline)
-//    const response = await fetch('localhost:8080/flight/routes?'+from+"/"+to+"/"+departure+"/"+wait_time+"/"+airline);
-//    const myJson = await response.json(); //extract JSON from the http response
-//    alert(myJson)
-//    // do something with myJson
 //}
+//var id;
+var routes;
+var selectedRoute;
 
-function searchRoute(from, to, departure, wait_time, airline){
-    console.log(from + " " + to + " " + departure + " " + wait_time + " " + airline)
+const searchRoutes = async (from, to, departure, wait_time, airline) => {
+var instant = new Date(departure).toISOString();
+    //console.log(instant)
+    //console.log(from + " " + to + " " + instant + " " + wait_time + " " + airline)
+    const response = await fetch('http://localhost:8080/flight/routes?from='+from+"&to="+to+"&departure="+instant+"&maxWait="+wait_time+"&airline="+airline);
+    routes = await response.json(); //extract JSON from the http response
+    var completelist= document.getElementById("routes");
+    var counter = 0;
+    routes.forEach(element => {
+        var item = "";
+        element.flights.forEach(flight => {
+            item = item + flight.fromCity+" => ";
+        });
+        item+= element.flights[element.flights.length - 1].fromCity;
+        var string1 = "<input type=\"radio\" value=\"Value"+counter+"\" name=\"RadioInputName\" id=\"id"+counter+"\"/>";
+        //console.log(string1);
+        var string2 = "<label class=\"list-group-item\" onclick=\"select("+counter+")\" type=\"radio\" for=\"id"+counter+"\">"+ item + "</label>";
+        completelist.innerHTML += string1;
+        completelist.innerHTML += string2;
+        counter++;
+    });
+    //var jsonString = JSON.stringify(routes).replace("\"","\\\"");
+    //console.log(jsonString);
+    completelist.innerHTML += "<div class=\"col-md\"><input type=\"submit\" value=\"Buy\" onclick=\"buyRoute()\" class=\"btn btn-primary btn-block\"></div>;";
+    
 
-   let request = new XMLHttpRequest();
-   request.open("GET", "http://localhost:8080/flight/routes?departure=2021-11-17T17%3A08%3A23Z&from=Budapest&maxWait=120&to=Wienna")
-   request.send();
-   request.onload = () => {
-       console.log(request);
-       if(request.status == 200){
-           console.log(JSON.parse(request.response));
-       }else{
-           console.log("error")
-       }
-   }
-    alert(myJson)
-    // do something with myJson
+    // do something with routes
 }
 
-const userAction = async () => {
-    const response = await fetch('http://example.com/movies.json', {
+function select(i){
+    selectedRoute = routes[i];
+   // console.log("Routes: "+JSON.stringify(routes, null, 2));
+    console.log("selectedRoute: "+JSON.stringify(selectedRoute, null, 2));
+   // buyRoute(route);
+}
+
+const buyRoute = async () => {
+    var jsonBody = JSON.stringify(selectedRoute);
+    console.log("Route: "+jsonBody);
+   //console.log(route);
+    const response = await fetch('http://localhost:8080/flight/reserve', {
         method: 'POST',
-        body: myBody, // string or object
+        body: jsonBody, // string or object
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'token':'admin' //TODO
         }
     });
-    const myJson = await response.json(); //extract JSON from the http response
+   // const myJson = await response.json(); //extract JSON from the http response
+    //alert(myJson);
     // do something with myJson
 }

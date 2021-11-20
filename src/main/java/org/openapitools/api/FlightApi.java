@@ -73,6 +73,7 @@ public class FlightApi {
 
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK")})
+    @CrossOrigin
     @GetMapping("/routes")
     public List<Route> routes(@RequestParam(value = "from", required = false) String from,
                               @RequestParam(value = "to", required = false) String to,
@@ -146,24 +147,27 @@ public class FlightApi {
             @ApiResponse(code = 401, message = "Not logged in"),
             @ApiResponse(code = 403, message = "Invalid input"),
             @ApiResponse(code = 500, message = "Internal server error occured")})
+    @CrossOrigin
     @PostMapping("/reserve")
-    public ResponseEntity<Void> reserve(
+    public String reserve(
             @ApiParam(value = "Security token", required = true) @RequestHeader(value = "token", required = true) String token,
             @ApiParam(value = "Flight IDs of flights to reserve", required = true) @Valid @RequestBody Route reservation) {
 
         UserWithPreferences user = userService.findByToken(token);
         // if invalid token
         if (user == null) {
-
+            return "NOT OK: invalid token";
         }
         for (Flight f : reservation.getFlights()){
             Optional<Flight> found = flightService.findById(f.getFlightId());
             if (!found.isPresent()){
                 // flight does not exist
+                return "NOT OK: flight not found";
 
             }
             if (found.get().getNumberOfSeats() <= 0){
                 // no seats left
+                return "NOT OK: seats";
 
             }
         }
@@ -184,8 +188,8 @@ public class FlightApi {
         // END OF TRANSACTION
 
         // external payment provider would be called here
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
-
+//        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+        return "OK";
     }
 
 }

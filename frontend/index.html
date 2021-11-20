@@ -1,287 +1,311 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <title>Places &mdash; Book your flight now</title>
-    
-    <link href="https://fonts.googleapis.com/css?family=Work+Sans:300,400,700" rel="stylesheet">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <link rel="stylesheet" href="assets/css/bootstrap/bootstrap.css">
-    <link rel="stylesheet" href="assets/css/animate.css">
-    <link rel="stylesheet" href="assets/fonts/ionicons/css/ionicons.min.css">
-    
-    <link rel="stylesheet" href="assets/css/owl.carousel.min.css">
-    
-    <link rel="stylesheet" href="assets/fonts/flaticon/font/flaticon.css">
+  <title>Places &mdash; Book your flight now</title>
 
-    <link rel="stylesheet" href="assets/css/bootstrap-datepicker.css">
-    <link rel="stylesheet" href="assets/fonts/fontawesome/css/font-awesome.min.css">
+  <link href="https://fonts.googleapis.com/css?family=Work+Sans:300,400,700" rel="stylesheet">
 
-    <link rel="stylesheet" href="assets/css/select2.css">
-    
+  <link rel="stylesheet" href="assets/css/bootstrap/bootstrap.css">
+  <link rel="stylesheet" href="assets/css/animate.css">
+  <link rel="stylesheet" href="assets/fonts/ionicons/css/ionicons.min.css">
 
-    <link rel="stylesheet" href="assets/css/helpers.css">
-    <link rel="stylesheet" href="assets/css/style.css">
-	<link rel="stylesheet" href="assets/css/login.css">
+  <link rel="stylesheet" href="assets/css/owl.carousel.min.css">
 
-  </head>
-  <body data-spy="scroll" data-target="#probootstrap-navbar" data-offset="200">
-  
+  <link rel="stylesheet" href="assets/fonts/flaticon/font/flaticon.css">
 
-    <nav class="navbar navbar-expand-lg navbar-dark probootstrap_navbar" id="probootstrap-navbar">
-      <div class="container">
-        <a class="navbar-brand">Places</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#probootstrap-menu" aria-controls="probootstrap-menu" aria-expanded="false" aria-label="Toggle navigation">
-          <span><i class="ion-navicon"></i></span>
-        </button>
-        <div class="collapse navbar-collapse" id="probootstrap-menu">
-          <ul class="navbar-nav ml-auto">
-            <li class="nav-item"><a class="nav-link" href="#section-home">Home</a></li>
-			<li class="nav-item"><a class="nav-link" href="#section-contact">Contact</a></li>
-			<label class="modal-btn btn btn-primary btn-block" for="modal-toggle">Login/Signup</label>
-				<!-- Login popup -->
-				<input id="modal-toggle" type="checkbox">
-				<label class="modal-backdrop" for="modal-toggle"></label>
-				<div class="modal-content">
-					<label class="modal-close-btn" for="modal-toggle">
-						<svg width="30" height="30">
-						<line x1="5" y1="5" x2="20" y2="20"/>
-							<line x1="20" y1="5" x2="5" y2="20"/>
-						</svg>
-					</label>
-					<div class="tabs">
-						<!--  LOG IN  -->
-						<input class="radio" id="tab-1" name="tabs-name" type="radio" checked>
-						<label for="tab-1" class="table"><span>Login</span></label>
-						<div class="tabs-content">
-						   <form action="">
-							   <input type="email" placeholder="Email" required>
-							   <input type="password" placeholder="Password" required>
-							   <input type="submit" value="Log In">
-						   </form>
-						</div>
-						<!--  SIGN UP  -->
-						<input class="radio" id="tab-2" name="tabs-name" type="radio">
-						<label for="tab-2" class="table"><span>Sign up</span></label>
-						<div class="tabs-content">
-						   <form action="">
-							   <input type="email" placeholder="Email" required>
-							   <input type="password" placeholder="Password" required>
-							   <input type="password" placeholder="Confirm password" required>
-							   <input type="submit" value="Sign Up">
-						   </form>
-						</div>
-					</div>
-				</div>			
-          </ul>
-        </div>
+  <link rel="stylesheet" href="assets/css/bootstrap-datepicker.css">
+  <link rel="stylesheet" href="assets/fonts/fontawesome/css/font-awesome.min.css">
+
+  <link rel="stylesheet" href="assets/css/select2.css">
+
+
+  <link rel="stylesheet" href="assets/css/helpers.css">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/login.css">
+
+</head>
+
+<body data-spy="scroll" data-target="#probootstrap-navbar" data-offset="200">
+
+
+  <nav class="navbar navbar-expand-lg navbar-dark probootstrap_navbar" id="probootstrap-navbar">
+    <div class="container">
+      <a class="navbar-brand">Places</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#probootstrap-menu"
+        aria-controls="probootstrap-menu" aria-expanded="false" aria-label="Toggle navigation">
+        <span><i class="ion-navicon"></i></span>
+      </button>
+      <div class="collapse navbar-collapse" id="probootstrap-menu">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item"><a class="nav-link" href="#section-home">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="#section-contact">Contact</a></li>
+          <label class="modal-btn btn btn-primary btn-block" for="modal-toggle">Login/Signup</label>
+          <!-- Login popup -->
+          <input id="modal-toggle" type="checkbox">
+          <label class="modal-backdrop" for="modal-toggle"></label>
+          <div class="modal-content">
+            <label class="modal-close-btn" for="modal-toggle">
+              <svg width="30" height="30">
+                <line x1="5" y1="5" x2="20" y2="20" />
+                <line x1="20" y1="5" x2="5" y2="20" />
+              </svg>
+            </label>
+            <div class="tabs">
+              <!--  LOG IN  -->
+              <input class="radio" id="tab-1" name="tabs-name" type="radio" checked>
+              <label for="tab-1" class="table"><span>Login</span></label>
+              <div class="tabs-content">
+                <form action="">
+                  <input type="email" placeholder="Email" required>
+                  <input type="password" placeholder="Password" required>
+                  <input type="submit" value="Log In">
+                </form>
+              </div>
+              <!--  SIGN UP  -->
+              <input class="radio" id="tab-2" name="tabs-name" type="radio">
+              <label for="tab-2" class="table"><span>Sign up</span></label>
+              <div class="tabs-content">
+                <form action="">
+                  <input type="email" placeholder="Email" required>
+                  <input type="password" placeholder="Password" required>
+                  <input type="password" placeholder="Confirm password" required>
+                  <input type="submit" value="Sign Up">
+                </form>
+              </div>
+            </div>
+          </div>
+        </ul>
       </div>
-    </nav>
-    <!-- END nav -->
-    
+    </div>
+  </nav>
+  <!-- END nav -->
 
-    <section class="probootstrap-cover overflow-hidden relative"  style="background-image: url('assets/images/bg.jpg');"  id="section-home">
-      <div class="overlay"></div>
-      <div class="container">
-        <div class="row align-items-center">
-          <div class="col-md">
-            <h2 class="heading mb-2 display-4 font-light probootstrap-animate">Explore The World With Ease</h2>
-            <p class="lead mb-5 probootstrap-animate">Powered by CompaniX Plc.</p>
-          </div> 
-          <div class="col-md probootstrap-animate">
-            <form action="#" class="probootstrap-form">
-              <div class="form-group">
-                <div class="row mb-3">
-                  <div class="col-md">
-                    <div class="form-group">
-                      <label for="from">From</label>
-					  <input class="form-control" id="from" name="from" placeholder="Heathrow Airport">
-                    </div>
+
+  <section class="probootstrap-cover overflow-hidden relative" style="background-image: url('assets/images/bg.jpg');"
+    id="section-home">
+    <div class="overlay"></div>
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-md">
+          <h2 class="heading mb-2 display-4 font-light probootstrap-animate">Explore The World With Ease</h2>
+          <p class="lead mb-5 probootstrap-animate">Powered by CompaniX Plc.</p>
+        </div>
+        <div class="col-md probootstrap-animate">
+          <form action="#" class="probootstrap-form">
+            <div class="form-group">
+              <div class="row mb-3">
+                <div class="col-md">
+                  <div class="form-group">
+                    <label for="from">From</label>
+                    <input class="form-control" id="from" name="from" value="Budapest" placeholder="Heathrow Airport">
                   </div>
-                  <div class="col-md">
-                    <div class="form-group">
-                      <label for="to">To</label>
-                      <input class="form-control" id="to" name="to" placeholder="Dubai International Airport">
+                </div>
+                <div class="col-md">
+                  <div class="form-group">
+                    <label for="to">To</label>
+                    <input class="form-control" id="to" name="to" value="Wienna"
+                      placeholder="Dubai International Airport">
+                  </div>
+                </div>
+              </div>
+              <!-- END row -->
+              <div class="row mb-5">
+                <div class="col-md">
+                  <div class="form-group">
+                    <label for="probootstrap-date-departure">Departure</label>
+                    <div class="probootstrap-date-wrap">
+                      <span class="icon ion-calendar"></span>
+                      <input type="text" id="probootstrap-date-departure" value="11/17/2021" class="form-control"
+                        placeholder="">
                     </div>
                   </div>
                 </div>
-                <!-- END row -->
-                <div class="row mb-5">
-                  <div class="col-md">
-                    <div class="form-group">
-                      <label for="probootstrap-date-departure">Departure</label>
-                      <div class="probootstrap-date-wrap">
-                        <span class="icon ion-calendar"></span> 
-                        <input type="text" id="probootstrap-date-departure" class="form-control" placeholder="">
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-md">
-                      <div class="form-group">
-                      <label for="airline_select">Airline</label>
-                      <div class="probootstrap_select-wrap">
-                        <label for="airline_select" style="width: 100%;">
-                        <select class="js-example-basic-single js-states form-control" id="airline_select" style="width: 100%;">
+                <div class="col-md">
+                  <div class="form-group">
+                    <label for="airline_select">Airline</label>
+                    <div class="probootstrap_select-wrap">
+                      <label for="airline_select" style="width: 100%;">
+                        <select class="js-example-basic-single js-states form-control" id="airline_select"
+                          style="width: 100%;">
                           <option value="All">All</option>
-						  <option value="Wizz Air">Wizz Air</option>
+                          <option value="Wizz Air">Wizz Air</option>
                           <option value="RyanAir">RyanAir</option>
                           <option value="KLM">KLM</option>
                           <option value="Emirates">Emirates</option>
                           <option value="British Airways">British Airways</option>
                           <option value="LOT">LOT</option>
+                          <option selected="selected" value="string">string</option>
                           <option value="American Airline">American Airline</option>
                           <option value="Virgin Airline">Virgin Airline</option>
                         </select>
                       </label>
-                      </div>
-                    </div>
-                  </div>
-				  <div class="col-md">
-                    <div class="form-group">
-                      <label for="wait_time">Max wait hours</label>
-                      <input type="number" class="form-control" id="wait_time" name="wait_time" min="1" max="48" value="8">
                     </div>
                   </div>
                 </div>
-                <!-- END row -->
-                <div class="row">
-                  <div class="col-md">
-                    <input type="submit" value="Submit" onclick="searchRoutes(document.getElementById('from').value,document.getElementById('to').value,
-                    document.getElementById('probootstrap-date-departure').value, document.getElementById('airline_select').value, document.getElementById('wait_time').value)" class="btn btn-primary btn-block">
+                <div class="col-md">
+                  <div class="form-group">
+                    <label for="wait_time">Max wait minutes</label>
+                    <input type="number" class="form-control" id="wait_time" name="wait_time" min="1" max="240"
+                      value="120">
                   </div>
                 </div>
               </div>
-            </form>
-          </div>
-        </div>
-      </div>
-    
-    </section>
-    <!-- END section -->
-    
-    <section class="probootstrap_section" id="section-feature-testimonial">
-      <div class="container">
-        <div class="row justify-content-center mb-5">
-          <div class="col-md-12 text-center mb-5 probootstrap-animate">
-            <h2 class="display-4 border-bottom probootstrap-section-heading">Testimonial</h2>
-            <blockquote class="">
-              <p class="lead mb-4"><em>This homework is of high quality. The detailed specification and the carefully designed architecture took my breath. For a moment, the only thing coming to my mind was "perfection".</em></p>
-              <p class="probootstrap-author">
-                <a target="_blank">
-                  <img src="assets/images/ceo.jpg" alt="Free Template by uicookies.com" class="rounded-circle">
-                  <span class="probootstrap-name">Charaf Hassan Dr.</span>
-                  <span class="probootstrap-title">Professor and head of department</span>
-                </a>
-              </p>
-            </blockquote>
-
-          </div>
-        </div>
-        
-      </div>
-    </section>
-    <!-- END section -->
-
-    <section class="probootstrap_section bg-light" id="section-contact">
-      <div class="container">
-        <div class="row text-center mb-5 probootstrap-animate">
-          <div class="col-md-12">
-            <h2 class="display-4 border-bottom probootstrap-section-heading">Get in Touch</h2>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-6 probootstrap-animate">
-            <p class="mb-5">Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts. Separated they live in Bookmarksgrove right at the coast of the Semantics, a large language ocean.</p>
-            <div class="row">
-              <div class="col-md-6">
-                <ul class="probootstrap-contact-details">
-                  <li>
-                    <span class="text-uppercase"><span class="ion-paper-airplane"></span> Email</span>
-                    probootstrap@gmail.com
-                  </li>
-                  <li>
-                    <span class="text-uppercase"><span class="ion-ios-telephone"></span> Phone</span>
-                    +30 976 1382 9921
-                  </li>
-                </ul>
-              </div>
-              <div class="col-md-6">
-                <ul class="probootstrap-contact-details">
-                  <li>
-                    <span class="text-uppercase"><span class="ion-ios-telephone"></span> Fax</span>
-                    +30 976 1382 9922
-                  </li>
-                  <li>
-                    <span class="text-uppercase"><span class="ion-location"></span> Address</span>
-                    San Francisco, CA <br>
-                    4th Floor8 Lower  <br>
-                    San Francisco street, M1 50F
-                  </li>
-                </ul>
+              <!-- END row -->
+              <div class="row">
+                <div class="col-md">
+                  <input type="submit" value="Submit"
+                    onclick="searchRoutes(document.getElementById('from').value,document.getElementById('to').value,
+                    document.getElementById('probootstrap-date-departure').value, document.getElementById('wait_time').value, document.getElementById('airline_select').value)"
+                    class="btn btn-primary btn-block">
+                </div>
               </div>
             </div>
-          </div>
-          <div class="col-md-6  probootstrap-animate">
-            <form action="#" method="post" class="probootstrap-form probootstrap-form-box mb60">
-              <div class="row mb-3">
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <label for="fname" class="sr-only sr-only-focusable">First Name</label>
-                    <input type="text" class="form-control" id="fname" name="fname" placeholder="First Name">
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <label for="lname" class="sr-only sr-only-focusable">Last Name</label>
-                    <input type="text" class="form-control" id="lname" name="lname" placeholder="Last Name">
-                  </div>
-                </div>
-              </div>
-              <div class="form-group">
-                <label for="email" class="sr-only sr-only-focusable">Email</label>
-                <input type="email" class="form-control" id="email" name="email" placeholder="Email">
-              </div>
-              <div class="form-group">
-                <label for="message" class="sr-only sr-only-focusable">Message</label>
-                <textarea cols="30" rows="10" class="form-control" id="message" name="message" placeholder="Write your message"></textarea>
-              </div>
-              <div class="form-group">
-                <input type="submit" class="btn btn-primary" id="submit" name="submit" value="Send Message">
-              </div>
-            </form>
-          </div>
+          </form>
         </div>
       </div>
-    </section>
+    </div>
 
 
-    <footer class="probootstrap_section probootstrap-border-top">
-      <div class="container">
-        <div class="row pt-5">
-          <div class="col-md-12 text-center">
-            <p class="probootstrap_font-14">&copy; 2017. All Rights Reserved. <br> Designed &amp; Developed by <a href="https://uicookies.com/" target="_blank">uiCookies</a></p>
-            <p class="probootstrap_font-14">Demo Images: <a href="https://unsplash.com/" target="_blank">Unsplash</a></p>
-          </div>
+    <div class="list-group" id="routes">
+      <!-- Found routes come here -->
+      
+    </div>
+
+  </section>
+  <!-- END section -->
+
+  <section class="probootstrap_section" id="section-feature-testimonial">
+    <div class="container">
+      <div class="row justify-content-center mb-5">
+        <div class="col-md-12 text-center mb-5 probootstrap-animate">
+          <h2 class="display-4 border-bottom probootstrap-section-heading">Testimonial</h2>
+          <blockquote class="">
+            <p class="lead mb-4"><em>This homework is of high quality. The detailed specification and the carefully
+                designed architecture took my breath. For a moment, the only thing coming to my mind was
+                "perfection".</em></p>
+            <p class="probootstrap-author">
+              <a target="_blank">
+                <img src="assets/images/ceo.jpg" alt="Free Template by uicookies.com" class="rounded-circle">
+                <span class="probootstrap-name">Charaf Hassan Dr.</span>
+                <span class="probootstrap-title">Professor and head of department</span>
+              </a>
+            </p>
+          </blockquote>
+
         </div>
       </div>
-    </footer>
 
-    
-    <script src="assets/js/flight-service.js"></script>
-    <script src="assets/js/jquery.min.js"></script>
-    
-    <script src="assets/js/popper.min.js"></script>
-    <script src="assets/js/bootstrap.min.js"></script>
-    <script src="assets/js/owl.carousel.min.js"></script>
-    
-    <script src="assets/js/bootstrap-datepicker.js"></script>
-    <script src="assets/js/jquery.waypoints.min.js"></script>
-    <script src="assets/js/jquery.easing.1.3.js"></script>
+    </div>
+  </section>
+  <!-- END section -->
 
-    <script src="assets/js/select2.min.js"></script>
+  <section class="probootstrap_section bg-light" id="section-contact">
+    <div class="container">
+      <div class="row text-center mb-5 probootstrap-animate">
+        <div class="col-md-12">
+          <h2 class="display-4 border-bottom probootstrap-section-heading">Get in Touch</h2>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6 probootstrap-animate">
+          <p class="mb-5">Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there
+            live the blind texts. Separated they live in Bookmarksgrove right at the coast of the Semantics, a large
+            language ocean.</p>
+          <div class="row">
+            <div class="col-md-6">
+              <ul class="probootstrap-contact-details">
+                <li>
+                  <span class="text-uppercase"><span class="ion-paper-airplane"></span> Email</span>
+                  probootstrap@gmail.com
+                </li>
+                <li>
+                  <span class="text-uppercase"><span class="ion-ios-telephone"></span> Phone</span>
+                  +30 976 1382 9921
+                </li>
+              </ul>
+            </div>
+            <div class="col-md-6">
+              <ul class="probootstrap-contact-details">
+                <li>
+                  <span class="text-uppercase"><span class="ion-ios-telephone"></span> Fax</span>
+                  +30 976 1382 9922
+                </li>
+                <li>
+                  <span class="text-uppercase"><span class="ion-location"></span> Address</span>
+                  San Francisco, CA <br>
+                  4th Floor8 Lower <br>
+                  San Francisco street, M1 50F
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6  probootstrap-animate">
+          <form action="#" method="post" class="probootstrap-form probootstrap-form-box mb60">
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="fname" class="sr-only sr-only-focusable">First Name</label>
+                  <input type="text" class="form-control" id="fname" name="fname" placeholder="First Name">
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="lname" class="sr-only sr-only-focusable">Last Name</label>
+                  <input type="text" class="form-control" id="lname" name="lname" placeholder="Last Name">
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="email" class="sr-only sr-only-focusable">Email</label>
+              <input type="email" class="form-control" id="email" name="email" placeholder="Email">
+            </div>
+            <div class="form-group">
+              <label for="message" class="sr-only sr-only-focusable">Message</label>
+              <textarea cols="30" rows="10" class="form-control" id="message" name="message"
+                placeholder="Write your message"></textarea>
+            </div>
+            <div class="form-group">
+              <input type="submit" class="btn btn-primary" id="submit" name="submit" value="Send Message">
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
 
-    <script src="assets/js/main.js"></script>
-  </body>
+
+  <footer class="probootstrap_section probootstrap-border-top">
+    <div class="container">
+      <div class="row pt-5">
+        <div class="col-md-12 text-center">
+          <p class="probootstrap_font-14">&copy; 2017. All Rights Reserved. <br> Designed &amp; Developed by <a
+              href="https://uicookies.com/" target="_blank">uiCookies</a></p>
+          <p class="probootstrap_font-14">Demo Images: <a href="https://unsplash.com/" target="_blank">Unsplash</a></p>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+
+  <script src="assets/js/flight-service.js"></script>
+  <script src="assets/js/jquery.min.js"></script>
+
+  <script src="assets/js/popper.min.js"></script>
+  <script src="assets/js/bootstrap.min.js"></script>
+  <script src="assets/js/owl.carousel.min.js"></script>
+
+  <script src="assets/js/bootstrap-datepicker.js"></script>
+  <script src="assets/js/jquery.waypoints.min.js"></script>
+  <script src="assets/js/jquery.easing.1.3.js"></script>
+
+  <script src="assets/js/select2.min.js"></script>
+
+  <script src="assets/js/main.js"></script>
+</body>
+
 </html>

@@ -22,5 +22,6 @@ public class Route implements Cloneable {
         this(new ArrayList<Flight>(newRoute.getFlights()));
         flights.add(newFlight);
     }
+
 }
 
