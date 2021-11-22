@@ -1,3 +1,50 @@
+const login = async (email, password) => {
+	const login_response = await fetch('http://localhost:8080/user/login', {
+        method: 'POST',
+        body: {
+			user: {
+				'email': email,
+				'password': password
+			}
+		},
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    });
+	var user = await login_response.json();
+	// extract token and preferences
+	var token = user['token'];
+    const preferences_response = await fetch('http://localhost:8080/user', {
+        method: 'GET',
+        body: {},
+        headers: {
+            'Content-Type': 'application/json',
+            'token': token
+        }
+    });
+    var preferences = await preferences_response.json();
+    document.getElementById('from').value = preferences['departure'];
+    document.getElementById('wait_time').value = preferences['transferTime'];
+    document.getElementById('airline_select').value = document.getElementById(preferences['airline']);
+}
+
+const register = async (email, password, confirm_password) => {
+	if (password == confirm_password){
+		const response = await fetch('http://localhost:8080/user/register', {
+			method: 'POST',
+			body: {
+				user: {
+					'email': email,
+					'password': password
+				}
+			},
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		});
+	}
+}
+
 //function searchRoutes(from, to, departure, wait_time, airline) {
 //  //  alert(from + " " + to + " " + departure + " " + wait_time + " " + airline)
 //  var date = new Date(departure);

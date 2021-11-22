@@ -59,21 +59,23 @@
               <input class="radio" id="tab-1" name="tabs-name" type="radio" checked>
               <label for="tab-1" class="table"><span>Login</span></label>
               <div class="tabs-content">
-                <form action="">
-                  <input type="email" placeholder="Email" required>
-                  <input type="password" placeholder="Password" required>
-                  <input type="submit" value="Log In">
+                <form id="login_form" action="">
+                  <input id="login_email" type="email" placeholder="Email" required>
+                  <input id="login_password" type="password" placeholder="Password" required>
+                  <input type="submit" value="Log In" onclick="login(document.getElementById('login_email').value,document.getElementById('login_password').value);"
+                    class="btn btn-primary btn-block">
                 </form>
               </div>
               <!--  SIGN UP  -->
               <input class="radio" id="tab-2" name="tabs-name" type="radio">
               <label for="tab-2" class="table"><span>Sign up</span></label>
               <div class="tabs-content">
-                <form action="">
-                  <input type="email" placeholder="Email" required>
-                  <input type="password" placeholder="Password" required>
-                  <input type="password" placeholder="Confirm password" required>
-                  <input type="submit" value="Sign Up">
+                <form id="signup_form" action="">
+                  <input id="signup_email" type="email" placeholder="Email" required>
+                  <input id="signup_password" type="password" placeholder="Password" required>
+                  <input id="signup_confirm_password" type="password" placeholder="Confirm password" required>
+                  <input type="submit" value="Sign Up" onclick="login(document.getElementById('login_email').value,document.getElementById('login_password').value,document.getElementById('login_confirm_password').value );"
+                    class="btn btn-primary btn-block">
                 </form>
               </div>
             </div>
@@ -131,16 +133,16 @@
                       <label for="airline_select" style="width: 100%;">
                         <select class="js-example-basic-single js-states form-control" id="airline_select"
                           style="width: 100%;">
-                          <option value="All">All</option>
-                          <option value="Wizz Air">Wizz Air</option>
-                          <option value="RyanAir">RyanAir</option>
-                          <option value="KLM">KLM</option>
-                          <option value="Emirates">Emirates</option>
-                          <option value="British Airways">British Airways</option>
-                          <option value="LOT">LOT</option>
+                          <option value="All" id="All">All</option>
+                          <option value="Wizz Air" id="WizzAir">Wizz Air</option>
+                          <option value="RyanAir" id="RyanAir">RyanAir</option>
+                          <option value="KLM" id="KLM">KLM</option>
+                          <option value="Emirates" id="Emirates">Emirates</option>
+                          <option value="British Airways" id="BritishAirways">British Airways</option>
+                          <option value="LOT" id="LOT">LOT</option>
                           <option selected="selected" value="string">string</option>
-                          <option value="American Airline">American Airline</option>
-                          <option value="Virgin Airline">Virgin Airline</option>
+                          <option value="American Airline" id="AmericanAirline">American Airline</option>
+                          <option value="Virgin Airline" id="VirginAirline">Virgin Airline</option>
                         </select>
                       </label>
                     </div>

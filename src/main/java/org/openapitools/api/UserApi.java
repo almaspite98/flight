@@ -49,15 +49,19 @@ public class UserApi{
             value = "/user",
             consumes = { "application/json" }
     )
-    public ResponseEntity<Void> setpreferences(
+    public ResponseEntity<Void> setPreferences(
             @ApiParam(value = "Security token", required = true) @RequestHeader(value = "token", required = true) String token,
             @ApiParam(value = "Preferences", required = true) @Valid @RequestBody Preferences preferences) {
+        System.out.println("Token: "+token);
         UserWithPreferences user = userService.findByToken(token);
 
         // if invalid token
         if (user == null) {
+            System.out.println("Invalid token");
 
         }
+        System.out.println("User is "+user.getEmail());
+
         user.setAirline(preferences.getAirline());
         user.setDeparture(preferences.getDeparture());
         user.setTransferTime(preferences.getTransferTime());
@@ -76,7 +80,9 @@ public class UserApi{
     )
     public ResponseEntity<Void> login(
             @ApiParam(value = "Username and hash of password", required = true) @Valid @RequestBody User user) {
+        System.out.println("Login user: " + user.getEmail()+", "+user.getPassword());
         UserWithPreferences userwithpreferences = userService.findByEmail(user.getEmail());
+        System.out.println("User credentials: " + user.getEmail()+", "+user.getPassword());
 
         // if password is correct
         if (userwithpreferences.getPassword().equals(user.getPassword())){
@@ -85,6 +91,7 @@ public class UserApi{
             byte bytes[] = new byte[20];
             random.nextBytes(bytes);
             String token = bytes.toString();
+            System.out.println("Generated token: "+token);
             userwithpreferences.setToken(token);
         }
         else {
@@ -105,12 +112,15 @@ public class UserApi{
     )
     public ResponseEntity<Void> register(
             @ApiParam(value = "Username and hash of password", required = true) @Valid @RequestBody User user) {
+        System.out.println("Register user: " + user.getEmail()+", "+user.getPassword());
         UserWithPreferences userwithpreferences = userService.findByEmail(user.getEmail());
 
         // if user already exists
         if (userwithpreferences != null){
-
+            System.out.println("User already exists");
+            return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
         }
+        System.out.println("Registering new user");
         userService.create(user);
 
         return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
