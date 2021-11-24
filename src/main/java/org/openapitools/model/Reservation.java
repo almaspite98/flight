@@ -20,7 +20,7 @@ public class Reservation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer Id;
     private Integer groupId;
-    private Integer flightId;
+    private String flightId;
     private String email;
     private Instant timestamp;
     private String status;

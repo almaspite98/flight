@@ -7,7 +7,6 @@ import javax.persistence.*;
 import java.time.Instant;
 
 
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2021-11-15T21:12:04.614312100+01:00[Europe/Prague]")
 @Data
 @Builder
 @With
@@ -18,8 +17,7 @@ import java.time.Instant;
 @Accessors(chain = true)
 public class Flight   {
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Integer flightId;
+  private String flightId;
   private Instant departureTime;
   private Instant arrivalTime;
   private String airline;

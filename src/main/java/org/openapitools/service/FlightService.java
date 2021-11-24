@@ -33,7 +33,7 @@ public class FlightService {
 
     public void update(Flight flight) { flightRepository.save(flight); }
 
-    public Optional<Flight> findById(int id) {
+    public Optional<Flight> findById(String id) {
         log.debug("Optional<Flight> findById(int id): {}", id);
         return flightRepository.findById(id);
     }
@@ -89,7 +89,7 @@ public class FlightService {
 //            return routes();
 //    }
 
-    public void delete(int flightId) {
+    public void delete(String flightId) {
         flightRepository.deleteById(flightId);
     }
 }

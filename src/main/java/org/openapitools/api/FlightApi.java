@@ -54,7 +54,7 @@ public class FlightApi {
     @ResponseStatus(HttpStatus.OK)
     @DeleteMapping("/{flightId}")
     public void deleteFlight(
-            @PathVariable("flightId") int flightId,
+            @PathVariable("flightId") String flightId,
             @ApiParam(value = "Api key", required = true) @RequestHeader(value = "api_key", required = true) String api_key) {
 
         Optional<Flight> flight = flightService.findById(flightId);
@@ -101,7 +101,7 @@ public class FlightApi {
             @ApiResponse(code = 500, message = "Internal server error occured")})
     @GetMapping("/{flightId}")
     public Flight getFlightById(
-            @ApiParam(value = "ID of flight to return", required = true) @PathVariable("flightId") Integer flightId) {
+            @ApiParam(value = "ID of flight to return", required = true) @PathVariable("flightId") String flightId) {
         // check if flight exists
         Optional<Flight> flight = flightService.findById(flightId);
         if (!flight.isPresent()){
@@ -177,8 +177,7 @@ public class FlightApi {
             String insert = "INSERT INTO reservations (email, flight_id, group_id, status, timestamp)\n" +
                     "VALUES ('"+user.getEmail()+"', "+i.getFlightId()+", @newID, 'PENDING', @time);\n";
             sql += insert;
-            String update = "UPDATE flights\nSET numberOfSeats = numberOfSeats-1\nWHERE flightId="+
-                    +i.getFlightId()+";";
+            String update = "UPDATE flights\nSET numberOfSeats = numberOfSeats-1\nWHERE flightId="+i.getFlightId()+";";
             sql += update;
         }
         sql += "COMMIT;\n";

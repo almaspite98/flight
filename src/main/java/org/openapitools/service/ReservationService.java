@@ -2,7 +2,6 @@ package org.openapitools.service;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.openapitools.model.Flight;
 import org.openapitools.model.Reservation;
 import org.openapitools.repository.ReservationRepository;
 import org.springframework.stereotype.Service;
@@ -15,7 +14,7 @@ import java.util.List;
 public class ReservationService {
     private final ReservationRepository reservationRepository;
 
-    public Reservation create(Integer groupId, Integer flightId, String email) {
+    public Reservation create(Integer groupId, String flightId, String email) {
         log.debug("Reservation create(Integer groupId, Integer flightId): {} {}", groupId, flightId);
         Reservation reservation = new Reservation();
         reservation.setGroupId(groupId);
