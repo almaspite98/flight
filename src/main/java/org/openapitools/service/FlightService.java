@@ -2,32 +2,37 @@ package org.openapitools.service;
 
 
 import lombok.AllArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import lombok.var;
+import org.openapitools.model.Airline;
 import org.openapitools.model.Flight;
 import org.openapitools.model.Route;
 import org.openapitools.model.RouteFinder;
 import org.openapitools.repository.FlightRepository;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 
-import java.time.Duration;
+import javax.security.sasl.AuthenticationException;
 import java.time.Instant;
-import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Slf4j
 @AllArgsConstructor
 @Service
 public class FlightService {
     private final FlightRepository flightRepository;
+    private final AirlineService airlineService;
 
-    public Flight create(Flight flight) {
+    @SneakyThrows
+    public Flight create(Flight flight, String apiKey) {
         log.debug("Flight create(Flight flight): {}", flight.toString());
+        Airline airline = airlineService.findByApiKey(apiKey);
+        // Authenticate and authorise
+        if (airline == null || !airline.getName().equals(flight.getAirline())){
+            throw new AuthenticationException("Given apikey is invalid.");
+//            return new ResponseEntity<>(errorDto, httpStatus);
+        }
         return flightRepository.save(flight);
     }
 

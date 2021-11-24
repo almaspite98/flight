@@ -36,13 +36,7 @@ public class FlightApi {
     public Flight create(
             @ApiParam(value = "Api key", required = true) @RequestHeader(value = "api_key", required = true) String api_key,
             @Valid @RequestBody Flight flight) {
-
-        Airline airline = airlineService.findByApiKey(api_key);
-        // Authenticate and authorise
-        if (airline == null || !airline.getName().equals(flight.getAirline())){
-
-        }
-        return flightService.create(flight);
+        return flightService.create(flight, api_key);
     }
 
     @ApiResponses(value = {
