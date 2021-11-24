@@ -41,6 +41,7 @@ public class BillingApi {
         // Set status. Revert functionality is done by another app
         for (Reservation r : reservations) {
             r.setStatus(result.getStatus());
+            reservationService.update(r);
         }
         return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
     }

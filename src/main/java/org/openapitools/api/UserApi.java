@@ -93,6 +93,7 @@ public class UserApi{
             String token = bytes.toString();
             System.out.println("Generated token: "+token);
             userwithpreferences.setToken(token);
+            userService.update(userwithpreferences);
         }
         else {
 

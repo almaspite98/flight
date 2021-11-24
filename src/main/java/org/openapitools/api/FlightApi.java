@@ -138,6 +138,7 @@ public class FlightApi {
         flight.setFromCity(newFlight.getFromCity());
         flight.setToCity(newFlight.getToCity());
         flight.setNumberOfSeats(newFlight.getNumberOfSeats());
+        flightService.update(flight);
         return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
     }
 
@@ -179,9 +180,9 @@ public class FlightApi {
             String update = "UPDATE flights\nSET numberOfSeats = numberOfSeats-1\nWHERE flightId="+
                     +i.getFlightId()+";";
             sql += update;
-
         }
         sql += "COMMIT;\n";
+        System.out.println(sql);
 
         SecureRandom random = new SecureRandom();
         Integer reservationId = random.nextInt();
@@ -195,6 +196,7 @@ public class FlightApi {
             reservationService.create(reservationId, i.getFlightId(), user.getEmail());
             Flight f = flightService.findById(i.getFlightId()).get();
             f.setNumberOfSeats(f.getNumberOfSeats()-1);
+            flightService.update(f);
         }
         // END OF TRANSACTION
 

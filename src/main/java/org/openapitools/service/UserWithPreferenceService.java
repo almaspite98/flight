@@ -26,5 +26,5 @@ public class UserWithPreferenceService {
     public UserWithPreferences findByEmail(String email){
         return userWithPreferenceRepository.findByEmail(email);
     }
-
+    public void update(UserWithPreferences user){ userWithPreferenceRepository.save(user); };
 }

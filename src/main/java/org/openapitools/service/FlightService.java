@@ -31,6 +31,8 @@ public class FlightService {
         return flightRepository.save(flight);
     }
 
+    public void update(Flight flight) { flightRepository.save(flight); }
+
     public Optional<Flight> findById(int id) {
         log.debug("Optional<Flight> findById(int id): {}", id);
         return flightRepository.findById(id);
