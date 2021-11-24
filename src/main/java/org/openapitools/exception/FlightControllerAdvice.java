@@ -9,6 +9,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import javax.security.sasl.AuthenticationException;
+import java.util.NoSuchElementException;
+
+import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 
 
 @Slf4j
@@ -16,8 +19,24 @@ import javax.security.sasl.AuthenticationException;
 @AllArgsConstructor
 public class FlightControllerAdvice {
     @ExceptionHandler(AuthenticationException.class)
-    public ResponseEntity<ErrorDto> handleNonUserCannotModifyException(final AuthenticationException exception) {
+    public ResponseEntity<ErrorDto> handleAuthenticationException(final AuthenticationException exception) {
         return createResponseEntity(exception, HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler({IllegalArgumentException.class, IllegalArgumentException.class, })
+    public ResponseEntity<ErrorDto> handleRunTimeException(final RuntimeException exception) {
+        return createResponseEntity(exception, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler({NoSuchElementException.class,})
+    public ResponseEntity<ErrorDto> handleNoSuchElementException(final NoSuchElementException exception) {
+        return createResponseEntity(exception, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler({Exception.class})
+    ResponseEntity<ErrorDto> defaultHandler(final Exception exception) {
+        log.error("Unhandled exception: {} > {}", exception.getClass().getSimpleName(), exception.getMessage());
+        return createResponseEntity(exception, INTERNAL_SERVER_ERROR);
     }
 
     private ResponseEntity<ErrorDto> createResponseEntity(Exception exception, HttpStatus httpStatus) {

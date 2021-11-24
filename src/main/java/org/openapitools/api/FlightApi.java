@@ -20,11 +20,9 @@ import java.util.Optional;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/flight")
+@CrossOrigin
 public class FlightApi {
-    private final UserWithPreferenceService userService;
     private final FlightService flightService;
-    private final AirlineService airlineService;
-    private final ReservationService reservationService;
 
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "Flight created"),
@@ -50,23 +48,12 @@ public class FlightApi {
     public void deleteFlight(
             @PathVariable("flightId") String flightId,
             @ApiParam(value = "Api key", required = true) @RequestHeader(value = "api_key", required = true) String api_key) {
-
-        Optional<Flight> flight = flightService.findById(flightId);
-        if (!flight.isPresent()){
-
-        }
-
-        Airline airline = airlineService.findByApiKey(api_key);
-        // Authenticate and authorise
-        if (airline == null || !airline.getName().equals(flight.get().getAirline())){
-
-        }
-        flightService.delete(flightId);
+        flightService.delete(flightId, api_key);
     }
 
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK")})
-    @CrossOrigin
+//    @CrossOrigin
     @GetMapping("/routes")
     public List<Route> routes(@RequestParam(value = "from", required = false) String from,
                               @RequestParam(value = "to", required = false) String to,
@@ -96,12 +83,7 @@ public class FlightApi {
     @GetMapping("/{flightId}")
     public Flight getFlightById(
             @ApiParam(value = "ID of flight to return", required = true) @PathVariable("flightId") String flightId) {
-        // check if flight exists
-        Optional<Flight> flight = flightService.findById(flightId);
-        if (!flight.isPresent()){
-
-        }
-        return flightService.findById(flightId).get();
+        return flightService.findById(flightId);
     }
 
 
@@ -113,27 +95,10 @@ public class FlightApi {
             @ApiResponse(code = 405, message = "Validation exception"),
             @ApiResponse(code = 500, message = "Internal server error occured")})
     @PutMapping
-    public ResponseEntity<Void> updateFlight(
+    public Flight updateFlight(
             @ApiParam(value = "Flight object that needs to be added to the database", required = true) @Valid @RequestBody Flight newFlight,
             @ApiParam(value = "Api key", required = true) @RequestHeader(value = "api_key", required = true) String api_key) {
-        Optional<Flight> flightExist = flightService.findById(newFlight.getFlightId());
-        if (!flightExist.isPresent()){
-
-        }
-        Flight flight = flightExist.get();
-
-        Airline airline = airlineService.findByApiKey(api_key);
-        // Authenticate and authorise
-        if (airline == null || !airline.getName().equals(flight.getAirline())){
-
-        }
-        flight.setArrivalTime(newFlight.getArrivalTime());
-        flight.setDepartureTime(newFlight.getDepartureTime());
-        flight.setFromCity(newFlight.getFromCity());
-        flight.setToCity(newFlight.getToCity());
-        flight.setNumberOfSeats(newFlight.getNumberOfSeats());
-        flightService.update(flight);
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+        return flightService.update(newFlight, api_key);
     }
 
     @ApiResponses(value = {
@@ -141,61 +106,11 @@ public class FlightApi {
             @ApiResponse(code = 401, message = "Not logged in"),
             @ApiResponse(code = 403, message = "Invalid input"),
             @ApiResponse(code = 500, message = "Internal server error occured")})
-    @CrossOrigin
     @PostMapping("/reserve")
     public String reserve(
             @ApiParam(value = "Security token", required = true) @RequestHeader(value = "token", required = true) String token,
-            @ApiParam(value = "Flight IDs of flights to reserve", required = true) @Valid @RequestBody Route reservation) {
-
-        UserWithPreferences user = userService.findByToken(token);
-        // if invalid token
-        if (user == null) {
-            return "NOT OK: invalid token";
-        }
-        for (Flight f : reservation.getFlights()){
-            Optional<Flight> found = flightService.findById(f.getFlightId());
-            if (!found.isPresent()){
-                // flight does not exist
-                return "NOT OK: flight not found";
-
-            }
-            if (found.get().getNumberOfSeats() <= 0){
-                // no seats left
-                return "NOT OK: seats";
-
-            }
-        }
-
-        String sql = "START TRANSACTION;\n@newID := SELECT MAX() FROM reservations;\n@time := SELECT NOW();\n";
-        for (Flight i : reservation.getFlights()){
-            String insert = "INSERT INTO reservations (email, flight_id, group_id, status, timestamp)\n" +
-                    "VALUES ('"+user.getEmail()+"', "+i.getFlightId()+", @newID, 'PENDING', @time);\n";
-            sql += insert;
-            String update = "UPDATE flights\nSET numberOfSeats = numberOfSeats-1\nWHERE flightId="+i.getFlightId()+";";
-            sql += update;
-        }
-        sql += "COMMIT;\n";
-        System.out.println(sql);
-
-        SecureRandom random = new SecureRandom();
-        Integer reservationId = random.nextInt();
-        // WARRNING: THIS ALL SHOULD BE A TRANSACTION
-        // get a valid unique reservationId
-        while (reservationService.groupIdInUse(reservationId)){
-            reservationId = random.nextInt();
-        }
-
-        for (Flight i : reservation.getFlights()){
-            reservationService.create(reservationId, i.getFlightId(), user.getEmail());
-            Flight f = flightService.findById(i.getFlightId()).get();
-            f.setNumberOfSeats(f.getNumberOfSeats()-1);
-            flightService.update(f);
-        }
-        // END OF TRANSACTION
-
-        // external payment provider would be called here
-//        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
-        return "OK";
+            @ApiParam(value = "Flight IDs of flights to reserve", required = true) @Valid @RequestBody Route route) {
+        return flightService.reserve(token, route);
     }
 
 }

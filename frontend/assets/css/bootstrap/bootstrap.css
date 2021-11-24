@@ -3677,7 +3677,7 @@ tbody.collapse.show {
 }
 
 .list-group input[type="radio"]:checked + .list-group-item {
-  background-color: #0275D8;
+  background-color: #006928;
   color: #FFF;
 }
 

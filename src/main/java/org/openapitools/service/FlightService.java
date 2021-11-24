@@ -5,16 +5,14 @@ import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import lombok.var;
-import org.openapitools.model.Airline;
-import org.openapitools.model.Flight;
-import org.openapitools.model.Route;
-import org.openapitools.model.RouteFinder;
+import org.openapitools.model.*;
 import org.openapitools.repository.FlightRepository;
 import org.springframework.stereotype.Service;
 
-import javax.security.sasl.AuthenticationException;
+import java.security.SecureRandom;
 import java.time.Instant;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Slf4j
@@ -23,24 +21,39 @@ import java.util.Optional;
 public class FlightService {
     private final FlightRepository flightRepository;
     private final AirlineService airlineService;
+    private final UserWithPreferenceService userService;
+    private final ReservationService reservationService;
+
 
     @SneakyThrows
     public Flight create(Flight flight, String apiKey) {
         log.debug("Flight create(Flight flight): {}", flight.toString());
-        Airline airline = airlineService.findByApiKey(apiKey);
-        // Authenticate and authorise
-        if (airline == null || !airline.getName().equals(flight.getAirline())){
-            throw new AuthenticationException("Given apikey is invalid.");
-//            return new ResponseEntity<>(errorDto, httpStatus);
-        }
+        airlineService.findByApiKey(apiKey, flight.getAirline());
         return flightRepository.save(flight);
     }
 
-    public void update(Flight flight) { flightRepository.save(flight); }
+    public Flight save(Flight flight) {
+        return flightRepository.save(flight);
+    }
 
-    public Optional<Flight> findById(String id) {
+    public Flight update(Flight newFlight, String api_key) {
+        Flight oldFlight = findById(newFlight.getFlightId());
+
+        airlineService.findByApiKey(api_key, newFlight.getAirline());
+
+        newFlight.setFlightId(oldFlight.getFlightId());
+        return save(newFlight);
+    }
+
+    @SneakyThrows
+    public Flight findById(String id) {
         log.debug("Optional<Flight> findById(int id): {}", id);
-        return flightRepository.findById(id);
+        // check if flight exists
+        Flight flight = flightRepository.findById(id).orElse(null);
+        if (flight == null) {
+            throw new NoSuchElementException("Flight not found by id: " + id);
+        }
+        return flight;
     }
 
     //TODO
@@ -64,37 +77,52 @@ public class FlightService {
         return routeFinder.resolve();
     }
 
-//    public List<Route> routes(String from, String to, Instant departure, Integer maxWait, String airline) {
-//        //15 talalat vagy 5 melyseg
-//        var startingFlights = findAll(from, to, departure.truncatedTo(ChronoUnit.DAYS), null, airline);
-//        if (startingFlights.size() >= 15) {
-//            return startingFlights.stream()
-//                    .map(flight -> Route.builder().flights(List.of(flight)).build())
-//                    .collect(Collectors.toList());
-//        }
-//        //not to ?
-//        var flights0 = findAll(from, null, departure.truncatedTo(ChronoUnit.DAYS), null, airline);
-//        ArrayList<Route> routes = new ArrayList<>();
-//        for(var flight : flights0){
-//            if(flight.getToCity().equals(to))
-//                continue;
-//            var flights1 = findAll(flight.getToCity(), to, departure.truncatedTo(ChronoUnit.DAYS), maxWait, airline);
-//            for(var flight1:flights1){
-//                if( Duration.between(flight1.getDepartureTime(),flight.getArrivalTime()).toMinutes()<=maxWait){
-//                    routes.add(Route.builder().flights(List.of(flight,flight1)).build());
-//                }
-//            }
-//        }
-//        return null;
-//    }
-//    public List<Route> routes(){
-//        if(troutes.size()>15 || i>5)
-//            return routes;
-//        else
-//            return routes();
-//    }
+    @SneakyThrows
+    public String reserve(String token, Route route) {
+        UserWithPreferences user = userService.findByToken(token);
+        for (Flight f : route.getFlights()) {
+            Flight flight = findById(f.getFlightId());
+            if (flight.getNumberOfSeats() <= 0) {
+                // no seats left
+                throw new IllegalArgumentException("There is no seat left on flight " + flight.getFlightId());
+            }
+        }
 
-    public void delete(String flightId) {
+        String sql = "START TRANSACTION;\n@newID := SELECT MAX() FROM reservations;\n@time := SELECT NOW();\n";
+        for (Flight i : route.getFlights()) {
+            String insert = "INSERT INTO reservations (email, flight_id, group_id, status, timestamp)\n" +
+                    "VALUES ('" + user.getEmail() + "', " + i.getFlightId() + ", @newID, 'PENDING', @time);\n";
+            sql += insert;
+            String update = "UPDATE flights\nSET numberOfSeats = numberOfSeats-1\nWHERE flightId=" + i.getFlightId() + ";";
+            sql += update;
+        }
+        sql += "COMMIT;\n";
+        System.out.println(sql);
+
+        SecureRandom random = new SecureRandom();
+        Integer reservationId = random.nextInt();
+        // WARRNING: THIS ALL SHOULD BE A TRANSACTION
+        // get a valid unique reservationId
+        while (reservationService.groupIdInUse(reservationId)) {
+            reservationId = random.nextInt();
+        }
+
+        for (Flight i : route.getFlights()) {
+            reservationService.create(reservationId, i.getFlightId(), user.getEmail());
+            Flight f = findById(i.getFlightId());
+            f.setNumberOfSeats(f.getNumberOfSeats() - 1);
+            save(f);
+        }
+        // END OF TRANSACTION
+
+        // external payment provider would be called here
+//        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+        return "OK";
+    }
+
+    public void delete(String flightId, String api_key) {
+        Flight flight = findById(flightId);
+        airlineService.findByApiKey(api_key, flight.getAirline());
         flightRepository.deleteById(flightId);
     }
 }

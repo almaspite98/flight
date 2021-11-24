@@ -8,7 +8,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.service.ApiInfo;
-import springfox.documentation.service.Contact;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.paths.Paths;
 import springfox.documentation.spring.web.paths.RelativePathProvider;
@@ -26,11 +25,8 @@ public class OpenAPIDocumentationConfig {
         return new ApiInfoBuilder()
             .title("Swagger Flightdatabase")
             .description("This is a sample server Flightdatabase server.")
-//            .license("Apache 2.0")
-//            .licenseUrl("http://www.apache.org/licenses/LICENSE-2.0.html")
             .termsOfServiceUrl("")
             .version("1.0.0")
-//            .contact(new Contact("","", "apiteam@swagger.io"))
             .build();
     }
 

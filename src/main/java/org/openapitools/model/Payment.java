@@ -7,7 +7,7 @@ import lombok.*;
 @With
 @AllArgsConstructor
 @NoArgsConstructor
-public class PaymentResult {
+public class Payment {
     Integer reservation_id;
     String status;
 }

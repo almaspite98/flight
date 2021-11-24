@@ -8,6 +8,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface UserWithPreferenceRepository extends JpaRepository<UserWithPreferences, Integer>, JpaSpecificationExecutor<UserWithPreferences> {
-    public UserWithPreferences findByToken(String token);
-    public UserWithPreferences findByEmail(String email);
+    UserWithPreferences findByToken(String token);
+    UserWithPreferences findByEmail(String email);
 }

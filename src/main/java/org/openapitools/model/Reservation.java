@@ -18,7 +18,7 @@ import java.time.Instant;
 public class Reservation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer Id;
+    private Integer id;
     private Integer groupId;
     private String flightId;
     private String email;

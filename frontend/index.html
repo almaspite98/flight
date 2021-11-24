@@ -62,7 +62,7 @@
                 <form id="login_form" action="">
                   <input id="login_email" type="email" placeholder="Email" required>
                   <input id="login_password" type="password" placeholder="Password" required>
-                  <input type="submit" value="Log In" onclick="login(document.getElementById('login_email').value,document.getElementById('login_password').value);"
+                  <input type="button" value="Log In" onclick="login(document.getElementById('login_email').value,document.getElementById('login_password').value);"
                     class="btn btn-primary btn-block">
                 </form>
               </div>
@@ -74,7 +74,7 @@
                   <input id="signup_email" type="email" placeholder="Email" required>
                   <input id="signup_password" type="password" placeholder="Password" required>
                   <input id="signup_confirm_password" type="password" placeholder="Confirm password" required>
-                  <input type="submit" value="Sign Up" onclick="login(document.getElementById('login_email').value,document.getElementById('login_password').value,document.getElementById('login_confirm_password').value );"
+                  <input type="button" value="Sign Up" onclick="register(document.getElementById('signup_email').value,document.getElementById('signup_password').value,document.getElementById('signup_confirm_password').value );"
                     class="btn btn-primary btn-block">
                 </form>
               </div>
@@ -159,7 +159,7 @@
               <!-- END row -->
               <div class="row">
                 <div class="col-md">
-                  <input type="submit" value="Submit"
+                  <input type="button" value="Submit"
                     onclick="searchRoutes(document.getElementById('from').value,document.getElementById('to').value,
                     document.getElementById('probootstrap-date-departure').value, document.getElementById('wait_time').value, document.getElementById('airline_select').value)"
                     class="btn btn-primary btn-block">
