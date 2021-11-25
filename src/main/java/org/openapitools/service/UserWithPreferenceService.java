@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import lombok.var;
+import org.openapitools.model.Preferences;
 import org.openapitools.model.User;
 import org.openapitools.model.UserWithPreferences;
 import org.openapitools.repository.UserWithPreferenceRepository;
@@ -35,12 +36,29 @@ public class UserWithPreferenceService {
         return userWithPreferenceRepository.save(newUserWithPreferences);
     }
 
+    public Preferences getPreferences(String token){
+        UserWithPreferences user = findByToken(token);
+        return new Preferences(user.getDeparture(), user.getTransferTime(), user.getAirline());
+    }
+
+    public UserWithPreferences setPreferences(Preferences preferences, String token){
+        System.out.println("Token: " + token);
+        UserWithPreferences user = findByToken(token);
+
+        System.out.println("User is " + user.getEmail());
+
+        user.setAirline(preferences.getAirline());
+        user.setDeparture(preferences.getDeparture());
+        user.setTransferTime(preferences.getTransferTime());
+
+        return userWithPreferenceRepository.save(user);
+    }
+
     @SneakyThrows
     public UserWithPreferences login(User user){
         System.out.println("Login user: " + user.getEmail() + ", " + user.getPassword());
         UserWithPreferences userwithpreferences = findByEmail(user.getEmail());
         System.out.println("User credentials: " + user.getEmail() + ", " + user.getPassword());
-
         // if password is correct
         if (userwithpreferences.getPassword().equals(user.getPassword())) {
             // generate token

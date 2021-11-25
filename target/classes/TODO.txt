@@ -11,3 +11,6 @@ valamint a gyakori utazóknak regisztrációs lehetőséget és preferált beál
 
 ----
 extra feature sorting
+
+api resoponse body and status fix up
+fix findall queries
