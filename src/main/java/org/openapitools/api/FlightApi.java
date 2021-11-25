@@ -53,7 +53,6 @@ public class FlightApi {
 
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK")})
-//    @CrossOrigin
     @GetMapping("/routes")
     public List<Route> routes(@RequestParam(value = "from", required = false) String from,
                               @RequestParam(value = "to", required = false) String to,
@@ -82,7 +81,7 @@ public class FlightApi {
             @ApiResponse(code = 500, message = "Internal server error occured")})
     @GetMapping("/{flightId}")
     public Flight getFlightById(
-            @ApiParam(value = "ID of flight to return", required = true) @PathVariable("flightId") String flightId) {
+            @PathVariable("flightId") String flightId) {
         return flightService.findById(flightId);
     }
 
@@ -96,8 +95,8 @@ public class FlightApi {
             @ApiResponse(code = 500, message = "Internal server error occured")})
     @PutMapping
     public Flight updateFlight(
-            @ApiParam(value = "Flight object that needs to be added to the database", required = true) @Valid @RequestBody Flight newFlight,
-            @ApiParam(value = "Api key", required = true) @RequestHeader(value = "api_key", required = true) String api_key) {
+            @Valid @RequestBody Flight newFlight,
+            @RequestHeader(value = "api_key", required = true) String api_key) {
         return flightService.update(newFlight, api_key);
     }
 
@@ -108,8 +107,8 @@ public class FlightApi {
             @ApiResponse(code = 500, message = "Internal server error occured")})
     @PostMapping("/reserve")
     public String reserve(
-            @ApiParam(value = "Security token", required = true) @RequestHeader(value = "token", required = true) String token,
-            @ApiParam(value = "Flight IDs of flights to reserve", required = true) @Valid @RequestBody Route route) {
+            @RequestHeader(value = "token", required = true) String token,
+            @Valid @RequestBody Route route) {
         return flightService.reserve(token, route);
     }
 

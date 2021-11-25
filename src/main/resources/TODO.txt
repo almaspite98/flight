@@ -14,3 +14,8 @@ extra feature sorting
 
 api resoponse body and status fix up
 fix findall queries
+FE: extend list melyik járat melyik társaság, esetleg az ID-ja, indulás érkezés, sum ido
+publish html page
+redirect
+transaction
+Fe: All

@@ -20,6 +20,10 @@ import java.util.UUID;
 public class UserWithPreferenceService {
     private final UserWithPreferenceRepository userWithPreferenceRepository;
 
+    public void getAdminPage(){
+
+    }
+
     public UserWithPreferences create(User user) {
         System.out.println("Register user: " + user.getEmail() + ", " + user.getPassword());
         UserWithPreferences userwithpreferences = findByEmail(user.getEmail());
