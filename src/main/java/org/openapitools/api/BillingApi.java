@@ -32,11 +32,17 @@ public class BillingApi {
     @PostMapping
     public ResponseEntity<Payment> billing(@RequestBody @Valid Payment payment) {
         List<Reservation> reservations = reservationService.findAllByGroupId(payment.getReservation_id());
-        // reservation does not exist or not in pending state
-        if (reservations.isEmpty() || !reservations.get(0).getStatus().equals("PENDING")){
+
+        if (reservations.isEmpty()){
+            System.out.println("Reservation does not exist");
+
+        }
+        if (!reservations.get(0).getStatus().equals("PENDING")){
+            System.out.println("Reservation is in wrong state");
 
         }
 
+        System.out.println("Setting status to "+payment.getStatus());
         // Set status. Revert functionality is done by another app
         for (Reservation r : reservations) {
             r.setStatus(payment.getStatus());

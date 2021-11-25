@@ -1,18 +1,14 @@
-CREATE EVENT 'Cleanup' ON SCHEDULE EVERY 5 MINUTE ENABLE
-DO BEGIN
+SET GLOBAL event_scheduler = "ON";
+DROP EVENT IF EXISTS CLEANUP;
+CREATE EVENT CLEANUP ON SCHEDULE EVERY 1 MINUTE ENABLE
+DO START TRANSACTION;
+    UPDATE flights AS F
+    SET number_of_seats = number_of_seats + (
+        SELECT COUNT(*) FROM reservations AS R
+        WHERE R.flight_id = F.flight_id AND ( R.status = 'FAILED' OR R.timestamp < NOW()-600 )
+    );
 
-	START TRANSACTION;
-
-		UPDATE flights
-		SET numberOfSeats = numberOfSeats + (
-			SELECT COUNT(*) FROM reservations AS R
-			WHERE R.flightId = flightId AND R.status = 'FAILED' OR R.timestamp<NOW()-600;
-		);
-
-		UPDATE reservations
-		SET status = 'CANCELLED'
-		WHERE status = 'FAILED' OR timestamp<NOW()-600;
-
-	COMMIT;
-
-END
+    UPDATE reservations
+    SET status = 'CANCELLED'
+    WHERE status = 'FAILED' OR timestamp<NOW()-600;
+COMMIT;
