@@ -116,6 +116,8 @@ public class FlightService {
             stmt.execute(update);
         }
         stmt.execute("commit");
+        stmt.close();
+        con.close();
         /*String sql = "START TRANSACTION;\nSET @newID := (SELECT MAX(group_id) FROM reservations)+1;\nSET @time := (SELECT NOW());\n";
         sql += "SET @fail := (SELECT COUNT(*) FROM FLIGHTS\n" + "WHERE ";
         for (Flight i : route.getFlights()) {
