@@ -23,7 +23,16 @@ public class AirlineService {
         if (airline == null || !airline.getName().equals(airLine)) {
             throw new AuthenticationException("Invalid apikey or airline");
         }
+        return airline;
+    }
 
+    @SneakyThrows
+    public Airline findByApiKey(String api_key){
+        var airline =  airlineRepository.findByApiKey(api_key);
+        // Authenticate and authorise
+        if (airline == null) {
+            throw new AuthenticationException("Invalid apikey or airline");
+        }
         return airline;
     }
 }

@@ -11,6 +11,8 @@ import java.util.List;
 @Repository
 public interface FlightRepository extends JpaRepository<Flight, String>, JpaSpecificationExecutor<Flight> {
 
+    List<Flight> findAllByAirline(String airline);
+
     List<Flight> findAllByFromCityAndToCityAndDepartureTimeBetween(String from, String to, Instant fromTime, Instant toTime);
 
     List<Flight> findAllByFromCityAndToCityAndDepartureTimeBetweenAndAirline(String from, String to, Instant fromTime, Instant toTime, String airLine);

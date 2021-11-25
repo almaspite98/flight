@@ -47,29 +47,17 @@ public class FlightApi {
     @DeleteMapping("/{flightId}")
     public void deleteFlight(
             @PathVariable("flightId") String flightId,
-            @ApiParam(value = "Api key", required = true) @RequestHeader(value = "api_key", required = true) String api_key) {
+            @RequestHeader(value = "api_key", required = true) String api_key) {
         flightService.delete(flightId, api_key);
     }
 
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "OK")})
-    @GetMapping("/routes")
-    public List<Route> routes(@RequestParam(value = "from", required = false) String from,
-                              @RequestParam(value = "to", required = false) String to,
-                              @RequestParam(value = "departure", required = false) Instant departure,
-                              @RequestParam(value = "maxWait", required = false) Integer maxWait,
-                              @RequestParam(value = "airline", required = false) String airline) {
-        return flightService.routes(from, to, departure, maxWait, airline);
-    }
+
 
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK")})
     @GetMapping
-    public List<Flight> findAll(@RequestParam(value = "from", required = false) String from,
-                              @RequestParam(value = "to", required = false) String to,
-                              @RequestParam(value = "departure", required = false) Instant departure,
-                              @RequestParam(value = "airline", required = false) String airline) {
-        return flightService.findAll(from, to, departure, airline);
+    public List<Flight> findAll(@RequestHeader(value = "api_key", required = true) String api_key) {
+        return flightService.findAllWithApiKey(api_key);
     }
 
     @ApiResponses(value = {
@@ -79,11 +67,10 @@ public class FlightApi {
             @ApiResponse(code = 404, message = "Flight not found"),
             @ApiResponse(code = 500, message = "Internal server error occured")})
     @GetMapping("/{flightId}")
-    public Flight getFlightById(
-            @PathVariable("flightId") String flightId) {
-        return flightService.findById(flightId);
+    public Flight getFlightById(@RequestHeader(value = "api_key", required = true) String api_key,
+                                @PathVariable("flightId") String flightId) {
+        return flightService.findById(flightId, api_key);
     }
-
 
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "Flight updated"),
@@ -98,17 +85,4 @@ public class FlightApi {
             @RequestHeader(value = "api_key", required = true) String api_key) {
         return flightService.update(newFlight, api_key);
     }
-
-    @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "Reservation is now Pending"),
-            @ApiResponse(code = 401, message = "Not logged in"),
-            @ApiResponse(code = 403, message = "Invalid input"),
-            @ApiResponse(code = 500, message = "Internal server error occured")})
-    @PostMapping("/reserve")
-    public String reserve(
-            @RequestHeader(value = "token", required = true) String token,
-            @Valid @RequestBody Route route) {
-        return flightService.reserve(token, route);
-    }
-
 }

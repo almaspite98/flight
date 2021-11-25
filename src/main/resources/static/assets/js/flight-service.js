@@ -22,15 +22,20 @@ const login = async (email, password) => {
         //document.getElementById("modal-toggle").close
         //$('#modal-toggle').modal('hide');
     }
+    
     current_user = await login_response.json();
-    console.log("deprature: " + current_user['departure'])
-    console.log("transferTime: " + current_user['transferTime'])
-    console.log("airline: " + current_user['airline'])
-    document.getElementById('probootstrap-date-departure').value = new Date(Date.now()).toLocaleDateString();
-    document.getElementById('from').value = current_user['departure'];
-    document.getElementById('wait_time').value = current_user['transferTime'];
-    document.getElementById(current_user['airline']).selected = true;
-    //document.getElementById('airline_select').value = document.getElementById(current_user['airline']);
+    if(current_user['departure'] != null){
+        console.log("deprature: " + current_user['departure'])
+        document.getElementById('from').value = current_user['departure'];
+    }
+    if(current_user['departure'] != null){
+        console.log("transferTime: " + current_user['transferTime'])
+        document.getElementById('wait_time').value = current_user['transferTime'];
+    }
+    if(current_user['airline'] != null){
+        console.log("airline: " + current_user['airline'])
+        document.getElementById(current_user['airline']).selected = true;
+    }
 }
 
 const register = async (email, password, confirm_password) => {
@@ -93,7 +98,7 @@ const searchRoutes = async (from, to, departure, wait_time, airline) => {
     var date2 = addHoursToDate(new Date(departure), 1); //central europe time
     var instant = date2.toISOString();
     //console.log(from + " " + to + " " + instant + " " + wait_time + " " + airline)
-    var url = 'http://localhost:8080/flight/routes?from=' + from + "&to=" + to + "&departure=" + instant + "&maxWait=" + wait_time
+    var url = 'http://localhost:8080/user/routes?from=' + from + "&to=" + to + "&departure=" + instant + "&maxWait=" + wait_time
     if(airline != "All")
     url += "&airline=" + airline
     const response = await fetch(url);
@@ -143,7 +148,7 @@ const buyRoute = async () => {
     if (current_user == null || current_user.token == null)
         alert("You need to login to reserve a flight")
     else {
-        const response = await fetch('http://localhost:8080/flight/reserve', {
+        const response = await fetch('http://localhost:8080/user/reserve', {
             method: 'POST',
             body: jsonBody, // string or object
             headers: {

@@ -4,12 +4,17 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.AllArgsConstructor;
 import org.openapitools.model.Preferences;
+import org.openapitools.model.Route;
 import org.openapitools.model.User;
 import org.openapitools.model.UserWithPreferences;
+import org.openapitools.service.FlightService;
 import org.openapitools.service.UserWithPreferenceService;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.time.Instant;
+import java.util.List;
 
 @RestController
 @AllArgsConstructor
@@ -17,6 +22,7 @@ import javax.validation.Valid;
 @RequestMapping("/user")
 public class UserApi {
     private final UserWithPreferenceService userService;
+    private final FlightService flightService;
 
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK"),
@@ -50,5 +56,29 @@ public class UserApi {
     @PostMapping("/register")
     public UserWithPreferences register(@Valid @RequestBody User user) {
         return userService.create(user);
+    }
+
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "OK")})
+    @GetMapping("/routes")
+    public List<Route> routes(@RequestParam(value = "from", required = false) String from,
+                              @RequestParam(value = "to", required = false) String to,
+                              @RequestParam(value = "departure", required = false) Instant departure,
+                              @RequestParam(value = "maxWait", required = false) Integer maxWait,
+                              @RequestParam(value = "airline", required = false) String airline) {
+        return flightService.routes(from, to, departure, maxWait, airline);
+    }
+
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "Reservation is now Pending"),
+            @ApiResponse(code = 401, message = "Not logged in"),
+            @ApiResponse(code = 403, message = "Invalid input"),
+            @ApiResponse(code = 500, message = "Internal server error occured")})
+    @ResponseStatus(HttpStatus.OK)
+    @PostMapping("/reserve")
+    public String reserve(
+            @RequestHeader(value = "token", required = true) String token,
+            @Valid @RequestBody Route route) {
+        return flightService.reserve(token, route);
     }
 }

@@ -42,7 +42,7 @@ public class FlightService {
     }
 
     public Flight update(Flight newFlight, String api_key) {
-        Flight oldFlight = findById(newFlight.getFlightId());
+        Flight oldFlight = findById(newFlight.getFlightId(), api_key);
 
         airlineService.findByApiKey(api_key, newFlight.getAirline());
 
@@ -59,6 +59,24 @@ public class FlightService {
             throw new NoSuchElementException("Flight not found by id: " + id);
         }
         return flight;
+    }
+
+    @SneakyThrows
+    public Flight findById(String id, String apiKey) {
+        log.info("Optional<Flight> findById(int id, String apiKey): {}, {}", id, apiKey);
+        var airline = airlineService.findByApiKey(apiKey);
+        Flight flight = flightRepository.findById(id).orElse(null);
+        // check if flight exists or has permission to see it
+        if (flight == null || !airline.getName().equals(flight.getAirline())) {
+            throw new NoSuchElementException("Flight not found by id: " + id);
+        }
+        return flight;
+    }
+
+    public List<Flight> findAllWithApiKey(String apiKey){
+        log.info("Flight findAllWithApiKey(apiKey): {}", apiKey);
+        var airLine = airlineService.findByApiKey(apiKey);
+        return flightRepository.findAllByAirline(airLine.getName());
     }
 
     //TODO
@@ -96,7 +114,7 @@ public class FlightService {
         }
 
         Connection con= DriverManager.getConnection(
-                "jdbc:mysql://localhost:3366/javabase","root","root");
+                "jdbc:mysql://localhost:3306/javabase","dalma","dalma");
         Statement stmt=con.createStatement();
         stmt.execute("start transaction");
         stmt.execute("SET @newID := IFNULL( (SELECT MAX(group_id) FROM reservations), 0 )+1");
