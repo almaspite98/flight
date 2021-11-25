@@ -99,7 +99,7 @@ public class FlightService {
                 "jdbc:mysql://localhost:3366/javabase","root","root");
         Statement stmt=con.createStatement();
         stmt.execute("start transaction");
-        stmt.execute("SET @newID := (SELECT MAX(group_id) FROM reservations)+1");
+        stmt.execute("SET @newID := IFNULL( (SELECT MAX(group_id) FROM reservations), 0 )+1");
         stmt.execute("SET @time := (SELECT NOW())");
         String sql = "SET @fail := (SELECT COUNT(*) FROM FLIGHTS\nWHERE ";
         for (Flight i : route.getFlights()) {
