@@ -1,7 +1,6 @@
 package org.openapitools.repository;
 
 import org.openapitools.model.Flight;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
@@ -12,24 +11,11 @@ import java.util.List;
 @Repository
 public interface FlightRepository extends JpaRepository<Flight, String>, JpaSpecificationExecutor<Flight> {
 
-//    List<Flight> findAll(hasAirline())
+    List<Flight> findAllByFromCityAndToCityAndDepartureTimeBetween(String from, String to, Instant fromTime, Instant toTime);
 
-    List<Flight> findAllByFromCityAndToCityAndDepartureTimeGreaterThan( String from,String to, Instant time);
-    List<Flight> findAllByFromCityAndDepartureTimeGreaterThan( String from, Instant time);
+    List<Flight> findAllByFromCityAndToCityAndDepartureTimeBetweenAndAirline(String from, String to, Instant fromTime, Instant toTime, String airLine);
 
-    static Specification<Flight> hasAirline(String airline) {
-        if(airline != null)
-            return (flight, cq, cb) -> cb.equal(flight.get("airline"), airline);
-        else return Specification.where(null);
-    }
+    List<Flight> findAllByFromCityAndDepartureTimeBetween(String from, Instant fromTime, Instant toTime);
 
-//    static Specification<Flight> hasMaxWait(Integer maxWait) {
-//        if(maxWait != null)
-//            return (flight, cq, cb) -> cb.equal(flight.get("airline"), airline);
-//        else return Specification.where(null);
-//    }
-
-    static Specification<Flight> titleContains(String title) {
-        return (flight, cq, cb) -> cb.like(flight.get("title"), "%" + title + "%");
-    }
+    List<Flight> findAllByFromCityAndDepartureTimeBetweenAndAirline(String from, Instant fromTime, Instant toTime, String airLine);
 }

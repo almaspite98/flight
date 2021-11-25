@@ -55,37 +55,48 @@ const register = async (email, password, confirm_password) => {
 }
 
 const savePreferences = async (from, wait_time, airline) => {
-    var json = {
-        'departure': from,
-        'transferTime': wait_time,
-        'airline':airline
-    }
-    console.log("token: "+current_user.token);
-    const login_response = await fetch('http://localhost:8080/user', {
-        method: 'POST',
-        body: JSON.stringify(json),
-        headers: {
-            'Content-Type': 'application/json',
-            'token': current_user.token
+    if (current_user != null && current_user.token != null){
+        var json = {
+            'departure': from,
+            'transferTime': wait_time,
+            'airline': airline
         }
-    });
-    if (login_response.status >= 400) {
-        alert("SavePreferences was unsuccessful. Please try again!")
-    } else {
-        alert("SavePreferences was successful.");
-        //document.getElementById("modal-toggle").close
-        //$('#modal-toggle').modal('hide');
+        console.log("token: " + current_user.token);
+        const login_response = await fetch('http://localhost:8080/user', {
+            method: 'POST',
+            body: JSON.stringify(json),
+            headers: {
+                'Content-Type': 'application/json',
+                'token': current_user.token
+            }
+        });
+        if (login_response.status >= 400) {
+            alert("SavePreferences was unsuccessful. Please try again!")
+        } else {
+            alert("SavePreferences was successful.");
+            //document.getElementById("modal-toggle").close
+            //$('#modal-toggle').modal('hide');
+        }
     }
+    
 }
 
+
+//JS
+function addHoursToDate(date, hours) {
+    return new Date(new Date(date).setHours(date.getHours() + hours));
+  }
 
 
 const searchRoutes = async (from, to, departure, wait_time, airline) => {
     savePreferences(from, wait_time, airline);
-    var instant = new Date(departure).toISOString();
-    //console.log(instant)
+    var date2 = addHoursToDate(new Date(departure), 1); //central europe time
+    var instant = date2.toISOString();
     //console.log(from + " " + to + " " + instant + " " + wait_time + " " + airline)
-    const response = await fetch('http://localhost:8080/flight/routes?from=' + from + "&to=" + to + "&departure=" + instant + "&maxWait=" + wait_time + "&airline=" + airline);
+    var url = 'http://localhost:8080/flight/routes?from=' + from + "&to=" + to + "&departure=" + instant + "&maxWait=" + wait_time
+    if(airline != "All")
+    url += "&airline=" + airline
+    const response = await fetch(url);
     if (response.status >= 400) {
         alert("Searching for routes was unsuccessful. Please try again!")
     } else {
@@ -110,7 +121,7 @@ const searchRoutes = async (from, to, departure, wait_time, airline) => {
         });
         //var jsonString = JSON.stringify(routes).replace("\"","\\\"");
         //console.log(jsonString);
-        if(routes.length>0)
+        if (routes.length > 0)
             completelist.innerHTML += "<div class=\"col-md\"><input type=\"submit\" value=\"Buy\" onclick=\"buyRoute()\" class=\"btn btn-primary btn-block\"></div>;";
     }
 
@@ -126,23 +137,27 @@ function select(i) {
 }
 
 const buyRoute = async () => {
-    console.log
     var jsonBody = JSON.stringify(selectedRoute);
     console.log("Route: " + jsonBody);
     //console.log(route);
-    const response = await fetch('http://localhost:8080/flight/reserve', {
-        method: 'POST',
-        body: jsonBody, // string or object
-        headers: {
-            'Content-Type': 'application/json',
-            'token': current_user.token
+    if (current_user == null || current_user.token == null)
+        alert("You need to login to reserve a flight")
+    else {
+        const response = await fetch('http://localhost:8080/flight/reserve', {
+            method: 'POST',
+            body: jsonBody, // string or object
+            headers: {
+                'Content-Type': 'application/json',
+                'token': current_user.token
+            }
+        });
+        if (response.status >= 400) {
+            alert("Reserving the route was unsuccessful. Please try again!")
+        } else {
+            alert("Reserving the route was successful. You'll be redirected to the site where you can finish your purchase!");
         }
-    });
-    if (response.status >= 400) {
-        alert("Reserving the route was unsuccessful. Please try again!")
-    } else {
-        alert("Reserving the route was successful. You'll be redirected to the site where you can finish your purchase!");
     }
+
     // const myJson = await response.json(); //extract JSON from the http response
     //alert(myJson);
     // do something with myJson

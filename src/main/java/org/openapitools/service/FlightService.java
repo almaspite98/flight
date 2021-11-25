@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.security.SecureRandom;
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -27,7 +28,7 @@ public class FlightService {
 
     @SneakyThrows
     public Flight create(Flight flight, String apiKey) {
-        log.debug("Flight create(Flight flight): {}", flight.toString());
+        log.info("Flight create(Flight flight): {}", flight.toString());
         airlineService.findByApiKey(apiKey, flight.getAirline());
         return flightRepository.save(flight);
     }
@@ -47,7 +48,7 @@ public class FlightService {
 
     @SneakyThrows
     public Flight findById(String id) {
-        log.debug("Optional<Flight> findById(int id): {}", id);
+        log.info("Optional<Flight> findById(int id): {}", id);
         // check if flight exists
         Flight flight = flightRepository.findById(id).orElse(null);
         if (flight == null) {
@@ -58,17 +59,19 @@ public class FlightService {
 
     //TODO
     public List<Flight> findAll(String from, String to, Instant departure, String airline) {
-        log.debug("List<Flight> findAll()");
-        if (to != null)
-            return flightRepository.findAllByFromCityAndToCityAndDepartureTimeGreaterThan(from, to, departure);
-        else
-            return flightRepository.findAllByFromCityAndDepartureTimeGreaterThan(from, departure);
-    }
-
-    //TODO
-    public Optional<Flight> findBy(String from, String to, Instant departure, String airline) {
-        log.debug("List<Flight> findAll()");
-        return flightRepository.findOne(FlightRepository.hasAirline(airline));
+        log.info("List<Flight> findAll()");
+        Instant toDate = departure.truncatedTo(ChronoUnit.DAYS).plus(1, ChronoUnit.DAYS);
+        if (to != null) {
+            if (airline != null)
+                return flightRepository.findAllByFromCityAndToCityAndDepartureTimeBetweenAndAirline(from, to, departure, toDate, airline);
+            else
+                return flightRepository.findAllByFromCityAndToCityAndDepartureTimeBetween(from, to, departure, toDate);
+        } else {
+            if (airline != null)
+                return flightRepository.findAllByFromCityAndDepartureTimeBetweenAndAirline(from, departure, toDate, airline);
+            else
+                return flightRepository.findAllByFromCityAndDepartureTimeBetween(from, departure, toDate);
+        }
     }
 
     public List<Route> routes(String from, String to, Instant departure, Integer maxWait, String airline) {
