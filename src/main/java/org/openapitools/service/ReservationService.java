@@ -6,6 +6,7 @@ import org.openapitools.model.Reservation;
 import org.openapitools.repository.ReservationRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.util.List;
 
 @Slf4j
@@ -20,6 +21,8 @@ public class ReservationService {
         reservation.setGroupId(groupId);
         reservation.setFlightId(flightId);
         reservation.setEmail(email);
+        reservation.setTimestamp(Instant.now());
+        reservation.setStatus("PENDING");
         return reservationRepository.save(reservation);
     }
 
