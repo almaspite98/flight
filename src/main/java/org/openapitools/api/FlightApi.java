@@ -68,7 +68,6 @@ public class FlightApi {
     public List<Flight> findAll(@RequestParam(value = "from", required = false) String from,
                               @RequestParam(value = "to", required = false) String to,
                               @RequestParam(value = "departure", required = false) Instant departure,
-                              @RequestParam(value = "maxWait", required = false) Integer maxWait,
                               @RequestParam(value = "airline", required = false) String airline) {
         return flightService.findAll(from, to, departure, airline);
     }
