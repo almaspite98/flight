@@ -155,6 +155,7 @@ const buyRoute = async () => {
             alert("Reserving the route was unsuccessful. Please try again!")
         } else {
             alert("Reserving the route was successful. You'll be redirected to the site where you can finish your purchase!");
+            window.location.assign("https://www.example.com");
         }
     }
 
