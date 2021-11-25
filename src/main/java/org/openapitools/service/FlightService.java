@@ -5,20 +5,20 @@ import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import lombok.var;
-import org.openapitools.model.*;
+import org.openapitools.model.Flight;
+import org.openapitools.model.Route;
+import org.openapitools.model.RouteFinder;
+import org.openapitools.model.UserWithPreferences;
 import org.openapitools.repository.FlightRepository;
 import org.springframework.stereotype.Service;
 
-import java.security.SecureRandom;
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.ResultSet;
 import java.sql.Statement;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 
 @Slf4j
 @AllArgsConstructor
