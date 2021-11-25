@@ -10,6 +10,10 @@ import org.openapitools.repository.FlightRepository;
 import org.springframework.stereotype.Service;
 
 import java.security.SecureRandom;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.time.Instant;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -88,17 +92,46 @@ public class FlightService {
             }
         }
 
-        String sql = "START TRANSACTION;\n@newID := SELECT MAX() FROM reservations;\n@time := SELECT NOW();\n";
+        Connection con= DriverManager.getConnection(
+                "jdbc:mysql://localhost:3366/javabase","root","root");
+        Statement stmt=con.createStatement();
+        stmt.execute("start transaction");
+        stmt.execute("SET @newID := (SELECT MAX(group_id) FROM reservations)+1");
+        stmt.execute("SET @time := (SELECT NOW())");
+        String sql = "SET @fail := (SELECT COUNT(*) FROM FLIGHTS\nWHERE ";
+        for (Flight i : route.getFlights()) {
+            sql += "(flight_id=\""+i.getFlightId()+"\" AND number_of_seats < 1) OR ";
+        }
+        sql += "0=1);\n";
+        stmt.execute(sql);
         for (Flight i : route.getFlights()) {
             String insert = "INSERT INTO reservations (email, flight_id, group_id, status, timestamp)\n" +
-                    "VALUES ('" + user.getEmail() + "', '" + i.getFlightId() + "', @newID, 'PENDING', @time);\n";
+                    "VALUES ('" + user.getEmail() + "', '" + i.getFlightId() + "', @newID, IF(@fail>0, 'CANCELLED', 'PENDING'), @time);\n";
+            stmt.execute(insert);
+            String update = "UPDATE flights\nSET number_of_seats = IF(@fail>0, number_of_seats, number_of_seats-1)\n" +
+                    "WHERE flight_id='" + i.getFlightId() + "';";
+            stmt.execute(update);
+        }
+        stmt.execute("commit");
+        /*String sql = "START TRANSACTION;\nSET @newID := (SELECT MAX(group_id) FROM reservations)+1;\nSET @time := (SELECT NOW());\n";
+        sql += "SET @fail := (SELECT COUNT(*) FROM FLIGHTS\n" + "WHERE ";
+        for (Flight i : route.getFlights()) {
+            sql += "(flight_id=\""+i.getFlightId()+"\" AND number_of_seats < 1) OR ";
+        }
+        sql += "0=1);\n";
+        for (Flight i : route.getFlights()) {
+            String insert = "INSERT INTO reservations (email, flight_id, group_id, status, timestamp)\n" +
+                    "VALUES ('" + user.getEmail() + "', '" + i.getFlightId() + "', @newID, IF(@fail>0, 'CANCELLED', 'PENDING'), @time);\n";
             sql += insert;
-            String update = "UPDATE flights\nSET numberOfSeats = numberOfSeats-1\nWHERE flightId='" + i.getFlightId() + "';";
+            String update = "UPDATE flights\nSET number_of_seats = IF(@fail>0, number_of_seats, number_of_seats-1)\n" +
+                    "WHERE flight_id='" + i.getFlightId() + "';";
             sql += update;
         }
         sql += "\nCOMMIT;\n";
         System.out.println(sql);
-
+        */
+        //stmt.execute(sql);
+/*
         SecureRandom random = new SecureRandom();
         Integer reservationId = random.nextInt();
         // WARRNING: THIS ALL SHOULD BE A TRANSACTION
@@ -114,7 +147,7 @@ public class FlightService {
             save(f);
         }
         // END OF TRANSACTION
-
+*/
         // external payment provider would be called here
 //        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
         return "OK";
