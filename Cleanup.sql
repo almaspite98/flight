@@ -10,12 +10,12 @@ START TRANSACTION;
     UPDATE javabase.flights AS F
     SET number_of_seats = number_of_seats + (
         SELECT COUNT(*) FROM javabase.reservations AS R
-        WHERE R.flight_id = F.flight_id AND ( R.status = 'FAILED' OR R.timestamp < NOW()-60 )
+        WHERE R.flight_id = F.flight_id AND ( R.status = 'FAILED' OR R.timestamp < NOW()-600 )
     );
 
     UPDATE javabase.reservations
     SET status = 'CANCELLED'
-    WHERE status = 'FAILED' OR timestamp<NOW()-60;
+    WHERE status = 'FAILED' OR timestamp<NOW()-600;
 COMMIT;
 end $$
 delimiter ;

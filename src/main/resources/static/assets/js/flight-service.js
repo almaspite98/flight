@@ -115,17 +115,18 @@ const searchRoutes = async (from, to, departure, wait_time, airline) => {
 
             routes = await response.json(); //extract JSON from the http response
             var completelist = document.getElementById("routes");
-            completelist.innerHTML = "";
+            completelist.innerHTML = "<h1>Search results</h1><div class=\"list-group\">";
             var counter = 0;
             routes.forEach(element => {
                 var item = "";
                 element.flights.forEach(flight => {
-                    item = item + flight.fromCity + " => ";
+                    item = item + "<label class=\"list-group-item\" onclick=\"select(" + counter + ")\" type=\"radio\" for=\"id" + counter + "\">" +
+                        flight.fromCity + "-" +flight.toCity + "\t\t" + flight.airline + "\t" +flight.flightId + "\t\tdeparture: " +
+                        flight.departureTime + "\tarrival: " +flight.arrivalTime + "</label>";
                 });
-                item += element.flights[element.flights.length - 1].toCity;
                 var string1 = "<input type=\"radio\" value=\"Value" + counter + "\" name=\"RadioInputName\" id=\"id" + counter + "\"/>";
                 //console.log(string1);
-                var string2 = "<label class=\"list-group-item\" onclick=\"select(" + counter + ")\" type=\"radio\" for=\"id" + counter + "\">" + item + "</label>";
+                var string2 = "<label class=\"list-group-item\" onclick=\"select(" + counter + ")\" type=\"radio\" for=\"id" + counter + "\">" + item + "</label></div>";
                 completelist.innerHTML += string1;
                 completelist.innerHTML += string2;
                 counter++;
