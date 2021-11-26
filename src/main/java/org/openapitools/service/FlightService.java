@@ -16,7 +16,6 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.Statement;
 import java.time.Instant;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -73,7 +72,7 @@ public class FlightService {
         return flight;
     }
 
-    public List<Flight> findAllWithApiKey(String apiKey){
+    public List<Flight> findAllWithApiKey(String apiKey) {
         log.info("Flight findAllWithApiKey(apiKey): {}", apiKey);
         var airLine = airlineService.findByApiKey(apiKey);
         return flightRepository.findAllByAirline(airLine.getName());
@@ -82,22 +81,25 @@ public class FlightService {
     //TODO
     public List<Flight> findAll(String from, String to, Instant departure, String airline) {
         log.info("List<Flight> findAll()");
-        Instant toDate = departure.truncatedTo(ChronoUnit.DAYS).plus(1, ChronoUnit.DAYS);
+//        Instant toDate = departure.truncatedTo(ChronoUnit.DAYS).plus(1, ChronoUnit.DAYS);
         if (to != null) {
             if (airline != null)
-                return flightRepository.findAllByFromCityAndToCityAndDepartureTimeBetweenAndAirline(from, to, departure, toDate, airline);
+                return flightRepository.findAllByFromCityAndToCityAndDepartureTimeGreaterThanAndAirline(from, to, departure, airline);
             else
-                return flightRepository.findAllByFromCityAndToCityAndDepartureTimeBetween(from, to, departure, toDate);
+                return flightRepository.findAllByFromCityAndToCityAndDepartureTimeGreaterThan(from, to, departure);
         } else {
             if (airline != null)
-                return flightRepository.findAllByFromCityAndDepartureTimeBetweenAndAirline(from, departure, toDate, airline);
+                return flightRepository.findAllByFromCityAndDepartureTimeGreaterThanAndAirline(from, departure, airline);
             else
-                return flightRepository.findAllByFromCityAndDepartureTimeBetween(from, departure, toDate);
+                return flightRepository.findAllByFromCityAndDepartureTimeGreaterThan(from, departure);
         }
     }
 
     public List<Route> routes(String from, String to, Instant departure, Integer maxWait, String airline) {
         //15 talalat vagy 5 melyseg
+        if (from == null || to == null || departure == null)
+            throw new IllegalArgumentException("FromCity, toCity and departure time cannot be null for searching routes.");
+        log.info("maxWait: "+ maxWait);
         var routeFinder = new RouteFinder(this, from, to, departure, airline, maxWait);
         return routeFinder.resolve();
     }
@@ -113,15 +115,15 @@ public class FlightService {
             }
         }
 
-        Connection con= DriverManager.getConnection(
-                "jdbc:mysql://localhost:3306/javabase","dalma","dalma");
-        Statement stmt=con.createStatement();
+        Connection con = DriverManager.getConnection(
+                "jdbc:mysql://localhost:3306/javabase", "dalma", "dalma");
+        Statement stmt = con.createStatement();
         stmt.execute("start transaction");
         stmt.execute("SET @newID := IFNULL( (SELECT MAX(group_id) FROM reservations), 0 )+1");
         stmt.execute("SET @time := (SELECT NOW())");
         String sql = "SET @fail := (SELECT COUNT(*) FROM FLIGHTS\nWHERE ";
         for (Flight i : route.getFlights()) {
-            sql += "(flight_id=\""+i.getFlightId()+"\" AND number_of_seats < 1) OR ";
+            sql += "(flight_id=\"" + i.getFlightId() + "\" AND number_of_seats < 1) OR ";
         }
         sql += "0=1);\n";
         stmt.execute(sql);

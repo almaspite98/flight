@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import javax.security.sasl.AuthenticationException;
+import java.time.Instant;
 import java.util.NoSuchElementException;
 
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
@@ -43,6 +44,7 @@ public class FlightControllerAdvice {
         log.error("Mapped exception: {} > {}", exception.getClass().getSimpleName(), exception.getMessage());
         var error = ErrorDto.builder()
                 .message(exception.getLocalizedMessage())
+                .timestamp(Instant.now())
                 .build();
         return new ResponseEntity<>(error, httpStatus);
     }

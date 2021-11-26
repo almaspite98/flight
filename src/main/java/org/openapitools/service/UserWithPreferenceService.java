@@ -11,7 +11,7 @@ import org.openapitools.repository.UserWithPreferenceRepository;
 import org.springframework.stereotype.Service;
 
 import javax.security.sasl.AuthenticationException;
-import java.security.SecureRandom;
+import java.util.NoSuchElementException;
 import java.util.UUID;
 
 @Slf4j
@@ -62,6 +62,8 @@ public class UserWithPreferenceService {
     public UserWithPreferences login(User user){
         System.out.println("Login user: " + user.getEmail() + ", " + user.getPassword());
         UserWithPreferences userwithpreferences = findByEmail(user.getEmail());
+        if(userwithpreferences == null)
+            throw new NoSuchElementException("User with given email doesnt exist. Please register");
         System.out.println("User credentials: " + user.getEmail() + ", " + user.getPassword());
         // if password is correct
         if (userwithpreferences.getPassword().equals(user.getPassword())) {

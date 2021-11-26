@@ -25,19 +25,18 @@ public class RouteFinder {
     //    Integer maxWait;
     String airline;
 
-//    final int maxWaitTime;
-    int maxWaitTime;
+    //    final int maxWaitTime;
+    Integer maxWaitTime;
 
     static final int maxDepth = 10;
-    static final int maxResultSize = 15;
-
-//    @Builder.Default
+    static final int maxResultSize = 20;
+    //    @Builder.Default
     ArrayList<Route> result = new ArrayList<>();
-//    @Builder.Default
+    //    @Builder.Default
     ArrayList<Route> pendingVisits = new ArrayList<>();
 
 
-    public RouteFinder(FlightService service, String sourceCity, String targetCity, Instant departure, String airline, int maxWaitTime) {
+    public RouteFinder(FlightService service, String sourceCity, String targetCity, Instant departure, String airline, Integer maxWaitTime) {
         this.service = service;
         this.sourceCity = sourceCity;
         this.targetCity = targetCity;
@@ -76,7 +75,7 @@ public class RouteFinder {
         var children = service.findAll(lastCity, null, lastArrival, airline);
 
         for (var child : children) {
-            if (lastFlight == null || Duration.between(lastFlight.getArrivalTime(), child.getDepartureTime()).toMinutes() <= maxWaitTime) {
+            if (maxWaitTime == null || lastFlight == null || Duration.between(lastFlight.getArrivalTime(), child.getDepartureTime()).toMinutes() <= maxWaitTime) {
                 var currentRoute = new Route(previousRoute, child);
                 if (child.getToCity().equals(targetCity)) {
                     result.add(currentRoute);
