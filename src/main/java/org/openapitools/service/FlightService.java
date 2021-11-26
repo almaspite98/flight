@@ -116,7 +116,7 @@ public class FlightService {
         }
 
         Connection con = DriverManager.getConnection(
-                "jdbc:mysql://localhost:3306/javabase", "dalma", "dalma");
+                "jdbc:mysql://localhost:3306/javabase", "flight", "flightpass");
         Statement stmt = con.createStatement();
         stmt.execute("start transaction");
         stmt.execute("SET @newID := IFNULL( (SELECT MAX(group_id) FROM reservations), 0 )+1");
