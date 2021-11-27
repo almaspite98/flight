@@ -76,9 +76,9 @@ const savePreferences = async (from, wait_time, airline) => {
             }
         });
         if (login_response.status >= 400) {
-            alert("SavePreferences was unsuccessful. Please try again!")
+            alert("SavePreferences was unsuccessful.")
         } else {
-            alert("SavePreferences was successful.");
+            //alert("SavePreferences was successful.");
             //document.getElementById("modal-toggle").close
             //$('#modal-toggle').modal('hide');
         }
@@ -102,7 +102,6 @@ const searchRoutes = async (from, to, departure, wait_time, airline) => {
         var instant = date2.toISOString();
         //console.log(from + " " + to + " " + instant + " " + wait_time + " " + airline)
         var url = 'http://localhost:8080/user/routes?from=' + from + "&to=" + to + "&departure=" + instant
-        alert(typeof wait_time)
         if (wait_time != null && wait_time.length!=0)
             url += "&maxWait=" + wait_time
         if (airline != "All" && airline != null && airline.length>0)
@@ -111,22 +110,22 @@ const searchRoutes = async (from, to, departure, wait_time, airline) => {
         if (response.status >= 400) {
             alert("Searching for routes was unsuccessful. Please try again!")
         } else {
-            alert("Searching for routes was successful. Please choose an option!");
+            //alert("Searching for routes was successful. Please choose an option!");
 
             routes = await response.json(); //extract JSON from the http response
             var completelist = document.getElementById("routes");
-            completelist.innerHTML = "<h1>Search results</h1><div class=\"list-group\">";
+            completelist.innerHTML = "<h1>Search results</h1>";
             var counter = 0;
             routes.forEach(element => {
                 var item = "";
                 element.flights.forEach(flight => {
-                    item = item + "<label class=\"list-group-item\" onclick=\"select(" + counter + ")\" type=\"radio\" for=\"id" + counter + "\">" +
-                        flight.fromCity + "-" +flight.toCity + "\t\t" + flight.airline + "\t" +flight.flightId + "\t\tdeparture: " +
-                        flight.departureTime + "\tarrival: " +flight.arrivalTime + "</label>";
+                    item += flight.fromCity + "-" +flight.toCity + "&emsp;&emsp;&emsp;&emsp;" + flight.airline + "&emsp;" +flight.flightId +
+                        "&emsp;&emsp;&emsp;&emsp;&emsp;departure: " + flight.departureTime + "&emsp;arrival: " +flight.arrivalTime +
+                        "<br/>&emsp;&emsp;&emsp;";
                 });
                 var string1 = "<input type=\"radio\" value=\"Value" + counter + "\" name=\"RadioInputName\" id=\"id" + counter + "\"/>";
                 //console.log(string1);
-                var string2 = "<label class=\"list-group-item\" onclick=\"select(" + counter + ")\" type=\"radio\" for=\"id" + counter + "\">" + item + "</label></div>";
+                var string2 = "<label class=\"list-group-item\" onclick=\"select(" + counter + ")\" type=\"radio\" for=\"id" + counter + "\">" + item + "</label>";
                 completelist.innerHTML += string1;
                 completelist.innerHTML += string2;
                 counter++;
