@@ -1,6 +1,6 @@
 CREATE DATABASE javabase;
 use javabase;
-CREATE USER 'flight'@'localhost' IDENTIFIED BY 'flightpass';
+CREATE USER 'flight'@'localhost' IDENTIFIED BY 'flightpass1234';
 GRANT ALL PRIVILEGES ON javabase.* TO 'flight'@'localhost';
 FLUSH PRIVILEGES;
 create table airlines (

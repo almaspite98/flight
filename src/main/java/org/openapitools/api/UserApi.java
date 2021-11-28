@@ -61,9 +61,9 @@ public class UserApi {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK")})
     @GetMapping("/routes")
-    public List<Route> routes(@RequestParam(value = "from", required = false) String from,
-                              @RequestParam(value = "to", required = false) String to,
-                              @RequestParam(value = "departure", required = false) Instant departure,
+    public List<Route> routes(@RequestParam(value = "from", required = true) String from,
+                              @RequestParam(value = "to", required = true) String to,
+                              @RequestParam(value = "departure", required = true) Instant departure,
                               @RequestParam(value = "maxWait", required = false) Integer maxWait,
                               @RequestParam(value = "airline", required = false) String airline) {
         return flightService.routes(from, to, departure, maxWait, airline);
