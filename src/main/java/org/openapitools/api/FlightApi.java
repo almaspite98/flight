@@ -1,21 +1,16 @@
 package org.openapitools.api;
 
-import io.swagger.annotations.*;
+import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import lombok.AllArgsConstructor;
-import org.openapitools.model.Airline;
 import org.openapitools.model.Flight;
-import org.openapitools.model.Route;
-import org.openapitools.model.UserWithPreferences;
-import org.openapitools.service.*;
+import org.openapitools.service.FlightService;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.security.SecureRandom;
-import java.time.Instant;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @AllArgsConstructor

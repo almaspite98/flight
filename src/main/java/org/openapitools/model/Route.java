@@ -2,7 +2,6 @@ package org.openapitools.model;
 
 import lombok.*;
 
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 

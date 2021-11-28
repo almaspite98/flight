@@ -1,6 +1,5 @@
 package org.openapitools.repository;
 
-import org.openapitools.model.User;
 import org.openapitools.model.UserWithPreferences;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
