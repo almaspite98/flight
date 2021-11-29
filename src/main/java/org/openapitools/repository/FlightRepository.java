@@ -20,4 +20,13 @@ public interface FlightRepository extends JpaRepository<Flight, String>, JpaSpec
     List<Flight> findAllByFromCityAndDepartureTimeGreaterThan(String from, Instant fromTime);
 
     List<Flight> findAllByFromCityAndDepartureTimeGreaterThanAndAirline(String from, Instant fromTime, String airLine);
+
+
+    List<Flight> findAllByFromCityAndToCityAndDepartureTimeBetween(String from, String to, Instant fromTime, Instant toTime);
+
+    List<Flight> findAllByFromCityAndToCityAndDepartureTimeBetweenAndAirline(String from, String to, Instant fromTime, Instant toTime, String airLine);
+
+    List<Flight> findAllByFromCityAndDepartureTimeBetween(String from, Instant fromTime, Instant toTime);
+
+    List<Flight> findAllByFromCityAndDepartureTimeBetweenAndAirline(String from, Instant fromTime, Instant toTime, String airLine);
 }

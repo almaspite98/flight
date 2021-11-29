@@ -16,6 +16,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.Statement;
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -81,17 +82,17 @@ public class FlightService {
     //TODO
     public List<Flight> findAll(String from, String to, Instant departure, String airline) {
         log.info("List<Flight> findAll()");
-//        Instant toDate = departure.truncatedTo(ChronoUnit.DAYS).plus(1, ChronoUnit.DAYS);
+        Instant toDate = departure.truncatedTo(ChronoUnit.DAYS).plus(1, ChronoUnit.DAYS);
         if (to != null) {
             if (airline != null)
-                return flightRepository.findAllByFromCityAndToCityAndDepartureTimeGreaterThanAndAirline(from, to, departure, airline);
+                return flightRepository.findAllByFromCityAndToCityAndDepartureTimeBetweenAndAirline(from, to, departure, toDate, airline);
             else
-                return flightRepository.findAllByFromCityAndToCityAndDepartureTimeGreaterThan(from, to, departure);
+                return flightRepository.findAllByFromCityAndToCityAndDepartureTimeBetween(from, to, departure, toDate);
         } else {
             if (airline != null)
-                return flightRepository.findAllByFromCityAndDepartureTimeGreaterThanAndAirline(from, departure, airline);
+                return flightRepository.findAllByFromCityAndDepartureTimeBetweenAndAirline(from, departure, toDate, airline);
             else
-                return flightRepository.findAllByFromCityAndDepartureTimeGreaterThan(from, departure);
+                return flightRepository.findAllByFromCityAndDepartureTimeBetween(from, departure, toDate);
         }
     }
 

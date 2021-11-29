@@ -62,7 +62,8 @@
                 <form id="login_form" action="">
                   <input id="login_email" type="email" placeholder="Email" required>
                   <input id="login_password" type="password" placeholder="Password" required>
-                  <input type="button" value="Log In" onclick="login(document.getElementById('login_email').value,document.getElementById('login_password').value);"
+                  <input type="button" value="Log In"
+                    onclick="login(document.getElementById('login_email').value,document.getElementById('login_password').value);"
                     class="btn btn-primary btn-block">
                 </form>
               </div>
@@ -74,7 +75,8 @@
                   <input id="signup_email" type="email" placeholder="Email" required>
                   <input id="signup_password" type="password" placeholder="Password" required>
                   <input id="signup_confirm_password" type="password" placeholder="Confirm password" required>
-                  <input type="button" value="Sign Up" onclick="register(document.getElementById('signup_email').value,document.getElementById('signup_password').value,document.getElementById('signup_confirm_password').value );"
+                  <input type="button" value="Sign Up"
+                    onclick="register(document.getElementById('signup_email').value,document.getElementById('signup_password').value,document.getElementById('signup_confirm_password').value );"
                     class="btn btn-primary btn-block">
                 </form>
               </div>
@@ -121,8 +123,7 @@
                     <label for="probootstrap-date-departure">Departure</label>
                     <div class="probootstrap-date-wrap">
                       <span class="icon ion-calendar"></span>
-                      <input type="text" id="probootstrap-date-departure" class="form-control"
-                        placeholder="">
+                      <input type="text" id="probootstrap-date-departure" class="form-control" placeholder="">
                     </div>
                   </div>
                 </div>
@@ -173,10 +174,13 @@
 
     <div class="list-group" id="routes">
       <!-- Found routes come here -->
-      
-    </div>
 
+    </div>
   </section>
+
+  <div id="search-results" class="container">
+    
+  </div>
   <!-- END section -->
 
   <section class="probootstrap_section" id="section-feature-testimonial">
@@ -203,6 +207,7 @@
     </div>
   </section>
   <!-- END section -->
+
 
   <section class="probootstrap_section bg-light" id="section-contact">
     <div class="container">
@@ -293,6 +298,7 @@
   </footer>
 
 
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
   <script src="assets/js/flight-service.js"></script>
   <script src="assets/js/jquery.min.js"></script>
 

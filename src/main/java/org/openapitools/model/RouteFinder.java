@@ -8,31 +8,22 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
 
-//@AllArgsConstructor
-//@RequiredArgsConstructor
-//@NoArgsConstructor
-@Data
 @Slf4j
-
+@Data
 public class RouteFinder {
     FlightService service;
-//    int depth;
 
     String sourceCity;
     String targetCity;
 
     Instant departure;
-    //    Integer maxWait;
     String airline;
 
-    //    final int maxWaitTime;
     Integer maxWaitTime;
 
     static final int maxDepth = 10;
     static final int maxResultSize = 20;
-    //    @Builder.Default
     ArrayList<Route> result = new ArrayList<>();
-    //    @Builder.Default
     ArrayList<Route> pendingVisits = new ArrayList<>();
 
 
@@ -65,6 +56,7 @@ public class RouteFinder {
                 return;
         }
     }
+
 
     private void visit(Route previousRoute) {
         final boolean first_city = previousRoute.flights.isEmpty();

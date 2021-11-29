@@ -209,6 +209,11 @@ textarea {
 table {
   border-collapse: collapse; }
 
+.table tbody tr.highlight td {
+  color: white;
+  background-color: #00CA4C;
+}
+
 caption {
   padding-top: 0.75rem;
   padding-bottom: 0.75rem;

@@ -19,8 +19,6 @@ const login = async (email, password) => {
         alert("Login was unsuccessful. Please try again!")
     } else {
         alert("Login was successful. Please proceed with finding the right flights for you!");
-        //document.getElementById("modal-toggle").close
-        //$('#modal-toggle').modal('hide');
     }
 
     current_user = await login_response.json();
@@ -86,25 +84,39 @@ const savePreferences = async (from, wait_time, airline) => {
 
 }
 
-
-//JS
 function addHoursToDate(date, hours) {
     return new Date(new Date(date).setHours(date.getHours() + hours));
 }
 
+//$('#infoTable').on('click', 'tbody tr', function (event) {
+//    $(this).addClass('highlight').siblings().removeClass('highlight');
+//});
+
+
+//$("#infoTable tr").click(function() {
+//
+//    $(".clickableRow").on("click",function(){
+//     $(".highlight").removeClass("highlight");
+//    $(this).addClass("highlight");
+//    
+//    });
+//});
+
+
+
 
 const searchRoutes = async (from, to, departure, wait_time, airline) => {
-    if (from == null || from.length==0 || to == null || to.length==0 || departure == null || departure.length==0)
+    selectedRoute=null;
+    if (from == null || from.length == 0 || to == null || to.length == 0 || departure == null || departure.length == 0)
         alert("Please fill From and To cities and Departure time in order to search for routes.")
     else {
         savePreferences(from, wait_time, airline);
         var date2 = addHoursToDate(new Date(departure), 1); //central europe time
         var instant = date2.toISOString();
-        //console.log(from + " " + to + " " + instant + " " + wait_time + " " + airline)
         var url = 'http://localhost:8080/user/routes?from=' + from + "&to=" + to + "&departure=" + instant
-        if (wait_time != null && wait_time.length!=0)
+        if (wait_time != null && wait_time.length != 0)
             url += "&maxWait=" + wait_time
-        if (airline != "All" && airline != null && airline.length>0)
+        if (airline != "All" && airline != null && airline.length > 0)
             url += "&airline=" + airline
         const response = await fetch(url);
         if (response.status >= 400) {
@@ -113,28 +125,48 @@ const searchRoutes = async (from, to, departure, wait_time, airline) => {
             //alert("Searching for routes was successful. Please choose an option!");
 
             routes = await response.json(); //extract JSON from the http response
-            var completelist = document.getElementById("routes");
-            completelist.innerHTML = "<h1>Search results</h1>";
+            var results = document.getElementById("search-results");
+            var table = "<h2 class=\"display-4 border-bottom probootstrap-section-heading\"><strong>Search Results</strong></h2><table id=\"infoTable\" class=\"table table-fixed table-condensed\"><thead><tr><th class=\"col-xs-3\">Path</th><th class=\"col-xs-3\">Airline</th><th class=\"col-xs-6\">FlightID</th><th class=\"col-xs-6\">Departure</th><th class=\"col-xs-6\">Arrival</th></tr></thead><tbody id=\"tbody\"></tbody></table>"
+            results.innerHTML=table
+            var completelist = document.getElementById("tbody");
+            completelist.innerHTML = ""
+            // completelist.innerHTML = "<h2 class=\"heading mb-2 display-4 font-light probootstrap-animate\">Search results</h2>";
             var counter = 0;
+
             routes.forEach(element => {
-                var item = "";
+                var path = "";
+                var departureTime = ""
+                var arrivalTime = ""
+                var airline = ""
+                var flightId = ""
                 element.flights.forEach(flight => {
-                    item += flight.fromCity + "-" +flight.toCity + "&emsp;&emsp;&emsp;&emsp;" + flight.airline + "&emsp;" +flight.flightId +
-                        "&emsp;&emsp;&emsp;&emsp;&emsp;departure: " + flight.departureTime + "&emsp;arrival: " +flight.arrivalTime +
-                        "<br/>&emsp;&emsp;&emsp;";
+                    path += flight.fromCity + " -> " + flight.toCity + "</br>"
+                    airline += flight.airline + "</br>"
+                    flightId += flight.flightId + "</br>"
+                    departureTime += flight.departureTime + "</br>"
+                    arrivalTime += flight.arrivalTime + "</br>"
+                    //onclick=\"select(" + counter + ", \"" + id + "\")\"
+
                 });
-                var string1 = "<input type=\"radio\" value=\"Value" + counter + "\" name=\"RadioInputName\" id=\"id" + counter + "\"/>";
-                //console.log(string1);
-                var string2 = "<label class=\"list-group-item\" onclick=\"select(" + counter + ")\" type=\"radio\" for=\"id" + counter + "\">" + item + "</label>";
-                completelist.innerHTML += string1;
-                completelist.innerHTML += string2;
+                var id = "id" + counter;
+                var arrivalTime;
+                //if (element.flights.length > 0) {
+                //    var lastFlight = element.flights[element.flights.length - 1];
+                //    path += lastFlight.toCity
+                //    arrivalTime = lastFlight.arrivalTime
+                //}
+                var string = "<tr id=\"" + id + "\" class=\"clickableRow\" onClick='select(" + counter + ",\"" + id + "\")' ><td class=\"col-xs-3\">" + path + "</td> <td class=\"col-xs-3\">" + airline + "</td> <td class=\"col-xs-6\">" + flightId + "</td> <td class=\"col-xs-6\">" + departureTime + "</td> <td class=\"col-xs-6\">" + arrivalTime + "</td> </tr>";
+                console.log("string: " + string)
+                completelist.innerHTML += string;
                 counter++;
+
             });
-            //var jsonString = JSON.stringify(routes).replace("\"","\\\"");
-            //console.log(jsonString);
-            if (routes.length > 0)
-                completelist.innerHTML += "<div class=\"col-md\"><input type=\"submit\" value=\"Buy\" onclick=\"buyRoute()\" class=\"btn btn-primary btn-block\"></div>;";
+            if (routes.length > 0) {
+                results.innerHTML += "<div class=\"col-md\"><input type=\"submit\" value=\"Buy\" onclick=\"buyRoute()\" class=\"btn btn-primary btn-block\" /></div>"
+
+            }
         }
+
 
     }
 
@@ -142,8 +174,16 @@ const searchRoutes = async (from, to, departure, wait_time, airline) => {
     // do something with routes
 }
 
-function select(i) {
+function select(i, id) {
+    console.log("id: " + id)
+    var row = document.getElementById(id);
+    console.log(row.id)
+    $(".highlight").removeClass("highlight");
+    row.classList.add("highlight");
     selectedRoute = routes[i];
+    //console.log("Hello")
+
+
     // console.log("Routes: "+JSON.stringify(routes, null, 2));
     console.log("selectedRoute: " + JSON.stringify(selectedRoute, null, 2));
     // buyRoute(route);
